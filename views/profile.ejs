@@ -1,0 +1,17 @@
+<div>
+    <h1><%= user.username %>'s Profile</h1>
+    <p>First Name: <%= user.firstName %></p>
+    <p>Last Name: <%= user.lastName %></p>
+    <p>Email: <%= user.email %></p>
+    <!-- list runs here -->
+    <h2><% if (isOwner) { %>Your Runs:<% } else { %><%= user.username %>'s Runs:<% } %></h2>
+    <ul>
+        <% if (runs.length === 0) { %>
+            <li>No runs logged yet.</li>
+        <% } else { %>
+            <% runs.forEach(run => { %>
+                <li>Date: <%= run.dateOfRun.toDateString() %>, Distance: <%= run.distanceKm %> km, Time: <%= run.durationMinutes %> mins</li>
+            <% }) %>
+        <% } %>
+    </ul>
+</div>
