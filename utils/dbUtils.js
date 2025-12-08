@@ -47,6 +47,15 @@ function mapUser(sqlUser) {
     lastName: sqlUser.last_name,
   });
 }
+function mapUsers(sqlUsers) {
+  const users = [];
+  console.log("Mapping " + sqlUsers.length + " users.");
+  console.log(sqlUsers);
+  sqlUsers.forEach((sqlUser) => {
+    users.push(mapUser(sqlUser));
+  });
+  return users;
+}
 async function mapRun(sqlRun) {
   return {
     runID: sqlRun.run_id,
@@ -119,15 +128,15 @@ async function getRunsByUserId(id, amount = -1, mode = "recent") {
 
 async function getRunsByFollowing(userID, amount = -1) {
   //get following IDs
-  const followingIDs = await getFollowing(userID);
+  const following = await getFollowing(userID);
 
-  if (followingIDs.length === 0) {
+  if (following.length === 0) {
     return [];
   }
   //get runs by following IDs
   const result = [];
-  for (const element of followingIDs) {
-    result.push(...await getRunsByUserId(element, -1, "recent"));
+  for (const element of following) {
+    result.push(...(await getRunsByUserId(element.userID, -1, "recent")));
   }
   //sort by date_of_run desc
   result.sort((a, b) => new Date(b.dateOfRun) - new Date(a.dateOfRun));
@@ -165,18 +174,40 @@ async function isFollowing(followerID, followeeID) {
   return results.length > 0;
 }
 async function getFollowers(userID) {
-  const results = await query(
+  const ids = await query(
     "SELECT follower_id FROM follows WHERE followee_id = ?",
     [userID]
   );
-  return results.map((row) => row.follower_id);
+
+  if (ids.length === 0) return [];
+
+  const placeholders = ids.map(() => "?").join(",");
+  const values = ids.map((r) => r.followee_id);
+
+  const users = await query(
+    `SELECT * FROM users WHERE user_id IN (${placeholders})`,
+    values
+  );
+
+  return mapUsers(users);
 }
 async function getFollowing(userID) {
-  const results = await query(
+  const ids = await query(
     "SELECT followee_id FROM follows WHERE follower_id = ?",
     [userID]
   );
-  return results.map((row) => row.followee_id);
+
+  if (ids.length === 0) return [];
+
+  const placeholders = ids.map(() => "?").join(",");
+  const values = ids.map((r) => r.followee_id);
+
+  const users = await query(
+    `SELECT * FROM users WHERE user_id IN (${placeholders})`,
+    values
+  );
+
+  return mapUsers(users);
 }
 
 module.exports = {

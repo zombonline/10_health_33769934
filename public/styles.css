@@ -150,6 +150,34 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+/* COMPACT PROFILE CARD (non-full display mode) */
+.profile-card.compact {
+    padding: 10px 15px;
+}
+
+.profile-card.compact .profile-avatar {
+    width: 70px;
+    height: 70px;
+}
+
+.profile-card.compact .profile-top {
+    gap: 10px;
+}
+
+.profile-card.compact .main-title {
+    font-size: 1.2em;
+    margin-top: 0;
+}
+
+.profile-card.compact .sub-title {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.profile-card.compact .profile-stats {
+    display: none;   /* ensure stats are hidden even if accidentally rendered */
+}
+
 .profile-top {
     display: flex;
     align-items: center;
@@ -184,19 +212,19 @@ body {
     border-radius: 8px;
     text-align: center;
 }
-.follow-stats {
+.profile-stats {
     display: flex;
     gap: 15px;
     margin-top: 5px;
 }
 
-.follow-stats a {
+.profile-stats a {
     color: #004999;
     text-decoration: none;
     font-size: 0.95em;
 }
 
-.follow-stats a:hover {
+.profile-stats a:hover {
     text-decoration: underline;
 }
 

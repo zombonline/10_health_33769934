@@ -1,0 +1,11 @@
+<ul class="runs-list" style="justify-content: center; flex-wrap: wrap;">
+    <% if (users.length === 0) { %>
+        <li class="run-item"><%= usersEmptyMessage %></li>
+    <% } else { %>
+        <%= console.log("User list containing " + users.length + " users."); %>
+        <%= users.forEach(user => console.log(user)); %>
+        <% users.forEach(user => { %>
+            <%- include("profileCard", { user: user, displayMode: "semi" }) %>
+        <% }) %>
+    <% } %>   
+</ul>

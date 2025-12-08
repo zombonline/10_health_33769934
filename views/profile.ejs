@@ -1,45 +1,23 @@
-<div class="profile-card">
-    <div class="profile-top">
-        <img class="profile-avatar" 
-             src="<%= user.profileImageUrl || '/img/default-avatar.png' %>" 
-             alt="Profile Picture">
-        <div class="profile-details">
-            <h1 class="main-title"><%= user.firstName %> <%= user.lastName %></h1>
-            <h3 class="sub-title">@<%= user.username %></h3>
-            <div class="follow-stats">
-                <a href="/followers/<%= user.userID %>">
-                    <strong><%= followersCount %></strong> Followers
-                </a>
-                <a href="/following/<%= user.userID %>">
-                    <strong><%= followingCount %></strong> Following
-                </a>
-            </div>
-                <% if (loggedUser && !isOwner) { %>
-                    <div class="profile-action">
-                        <% if (isFollowing) { %>
-                            <form action="/unfollow/<%= user.userID %>" method="POST">
-                                <button type="submit" class="submit-btn btn-danger">
-                                    Unfollow
-                                </button>
-                            </form>
-                        <% } else { %>
-                            <form action="/follow/<%= user.userID %>" method="POST">
-                                <button type="submit" class="submit-btn">
-                                    Follow
-                                </button>
-                            </form>
-                        <% } %>
-                    </div>
-                <% } %>
-        </div>
+<%- include("partials/profileCard", { 
+    user: user, 
+    followers: followers, 
+    following: following, 
+    loggedUser: loggedUser, 
+    isOwner: isOwner, 
+    isFollowing: isFollowing,
+    displayMode: "full"
+}) %>
 
-    </div>
-</div>
-
+<h2 class="sub-title" style="text-align: center;"><%= isOwner ? "Your Runs" : user.username + "'s Runs" %></h2>
 <div class="profile-stats">
     <div class="stat-box">
-        <h3>Total Runs</h3>
-        <p><%= runs.length %></p>
+        <h3>Runs this year</h3>
+        <p><%= runs.filter(run => {
+            const runDate = new Date(run.dateOfRun);
+            const currentYear = new Date().getFullYear();
+            console.log(runDate.getFullYear(), currentYear);
+            return runDate.getFullYear() === currentYear;
+        }).length %></p>
     </div>
     <div class="stat-box">
         <h3>Total Distance</h3>
@@ -50,21 +28,6 @@
         <p><%= runs.length > 0 ? Math.max(...runs.map(run => Number(run.distanceKm))) : 0 %> km</p>
     </div>
 </div>
-
-<h2 class="sub-title" style="text-align: center;"><%= isOwner ? "Your Runs" : user.username + "'s Runs" %></h2>
-
-<ul class="runs-list" style ="justify-content: center; flex-wrap: wrap;">
-     <% if (isOwner) { %>
-            <a href="/runs/add" class="submit-btn" style="text-decoration:none; padding:6px 12px; display:inline-block; margin-bottom:10px;">
-                + Add New Run
-            </a>
-    <% } %>
-    <% if (runs.length === 0) { %>
-        <li class="run-item">No runs logged yet.</li>
-    <% } else { %>
-        <% runs.forEach(run => { %>
-            <!-- load runItem partial -->
-            <%- include("partials/runItem", { run: run }) %>
-        <% }) %>
-    <% } %>
-</ul>
+<%- include("partials/runsList", { runs: runs, showUser: false, runsEmptyMessage: "No runs logged yet." }) %>
+<%- include("partials/usersList", { users: followers, usersEmptyMessage: "No followers yet." }) %>
+<%- include("partials/usersList", { users: following, usersEmptyMessage: "Not following anyone yet." }) %>

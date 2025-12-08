@@ -1,0 +1,48 @@
+<!-- required params: user, followers, following, runs, loggedUser, isOwner, isFollowing, displayMode (full, compact) -->
+<div class="profile-card <%= displayMode !== 'full' ? 'compact' : '' %>">
+    <div class="profile-top">
+        <img class="profile-avatar" 
+             src="<%= user.profileImageUrl || '/img/default-avatar.png' %>" 
+             alt="Profile Picture">
+        <div class="profile-details">
+            <!-- check user first last name -->
+            <% if(!user.firstName || !user.lastName) { %>
+                <h1 class="main-title"><%= user.username %></h1>
+            <% } else { %>
+                <h1 class="main-title"><%= user.firstName %> <%= user.lastName %></h1>
+            <% } %>
+            <h3 class="sub-title">@<%= user.username %></h3>
+            <% if(displayMode === 'full') { %>
+            <div class="profile-stats">
+                <a href="/follow/followers/<%= user.userID %>">
+                    <strong><%= followers.length %></strong> Followers
+                </a>
+                <a href="/follow/following/<%= user.userID %>">
+                    <strong><%= following.length %></strong> Following
+                </a>
+                <a href="/profile/<%= user.userID %>">
+                    <strong><%= runs.length %></strong> Runs
+                </a>
+            </div>
+            <% } %>
+                <% if (loggedUser && !isOwner) { %>
+                    <div class="profile-action">
+                        <% if (isFollowing) { %>
+                            <form action="/unfollow/<%= user.userID %>" method="POST">
+                                <button type="submit" class="submit-btn btn-danger">
+                                    Unfollow
+                                </button>
+                            </form>
+                        <% } else { %>
+                            <form action="/follow/<%= user.userID %>" method="POST">
+                                <button type="submit" class="submit-btn">
+                                    Follow
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                <% } %>
+        </div>
+
+    </div>
+</div>

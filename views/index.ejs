@@ -1,34 +1,10 @@
 <body>
     <% if(loggedUser) { %>
-        <!-- Greeting -->
         <h1>Welcome, <%= loggedUser.firstName %>!</h1>
-        <!-- Recent runs (5) -->
         <h2>Your Recent Runs</h2>
-        <ul class="runs-list" style="justify-content: center; flex-wrap: wrap;">
-            <% if (recentRuns.length === 0) { %>
-                <li class="run-item">No runs logged yet.</li>
-            <% } else { %>
-                <% recentRuns.forEach(run => { %>
-                    <!-- load runItem partial -->
-                    <%- include("partials/runItem", { run: run, showUser: false }) %>
-                <% }) %>
-            <% } %>
-        </ul>
-        <!-- Runs from followed users (5) -->
+        <%- include("partials/runsList", { runs: recentRuns, showUser: false, runsEmptyMessage: "No recent runs logged yet." }) %>
         <h2>Runs from Users You Follow</h2>
-        <ul class="runs-list" style="justify-content: center; flex-wrap: wrap
-;">
-            <% if (followingRuns.length === 0) { %>
-                <li class="run-item">No runs from followed users yet.</li>
-            <% } else { %>
-                <% var lastUserID = -1; %>
-                <% followingRuns.forEach(run => { %>
-                    <%- include("partials/runItem", { run: run, showUser: run.user.userID !== lastUserID }) %>
-                    <% lastUserID = run.user.userID; %>
-                <% }) %>
-            <% } %>
-        </ul>
-
+        <%- include("partials/runsList", { runs: followingRuns, showUser: true, runsEmptyMessage: "No runs from users you follow." }) %>
     <% } else { %>
         <h1>Welcome to the Running Tracker App!</h1>
     <% } %>

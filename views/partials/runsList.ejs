@@ -1,0 +1,10 @@
+<ul class="runs-list" style="justify-content: center; flex-wrap: wrap;">
+    <% if (runs.length === 0) { %>
+        <li class="run-item"><%= runsEmptyMessage %></li>
+    <% } else { %>
+        <% runs.forEach(run => { %>
+            <!-- load runItem partial -->
+            <%- include("runItem", { run: run, showUser: showUser }) %>
+        <% }) %>
+    <% } %>   <!-- ← this was missing -->
+</ul>
