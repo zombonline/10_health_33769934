@@ -58,6 +58,12 @@ app.use("/", mainRoutes);
 const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
 
+const runsRoutes = require("./routes/runs");
+app.use("/runs", runsRoutes);
+
+const followRoutes = require("./routes/follow");
+app.use("/follow", followRoutes);
+
 app.use((error, req, res, next) => {
   console.error(error.stack);
   res.status(500).send("Something broke!<br>" + error.message);

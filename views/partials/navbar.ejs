@@ -1,10 +1,10 @@
 <nav class="navbar">
   <a href="/" class="nav-btn">Home</a>
   <a href="/about" class="nav-btn">About</a>
-  <% const user = loggedUser; %>
-  <% console.log('Navbar user:', user); %>
-  <% if (user) { %>
-    <a href="/profile/<%= user.userID %>" class="nav-btn">Profile</a>
+  <% if (loggedUser) { %>
+    <a href="/profile/<%= loggedUser.userID %>" class="nav-btn">Profile</a>
+    <a href="/runs/add" class="nav-btn">Add Run</a>
+    <a href="/auth/settings" class="nav-btn">Settings</a>
     <a href="/auth/logout" class="nav-btn">Logout</a>
   <% } else { %>
     <a href="/auth" class="nav-btn">Register/Login</a>

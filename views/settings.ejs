@@ -1,0 +1,110 @@
+<div class="form-container">
+    <!-- Update username -->
+    <div id="username-row"
+         class="setting-row"
+         onclick="toggleSetting('username-form'); toggleSetting('username-row');">
+        <span class="setting-label">Username</span>
+        <span class="setting-value">
+            <%= loggedUser.username %>
+        </span>
+    </div>
+
+    <form id="username-form" 
+          class="setting-edit-form hidden" 
+          action="/settings/username" 
+          method="POST">
+        
+        <label for="newUsername">New Username</label>
+        <input type="text" name="newUsername" id="newUsername" required>
+
+        <button class="submit-btn" type="submit">Save</button>
+
+        <button type="button"
+                class="submit-btn btn-secondary"
+                onclick="toggleSetting('username-form'); toggleSetting('username-row');">
+            Cancel
+        </button>
+    </form>
+    
+    <!-- Update password -->
+    <div id="password-row"
+         class="setting-row"
+         onclick="toggleSetting('password-form'); toggleSetting('password-row');">
+        <span class="setting-label">Password</span>
+        <span class="setting-value">
+            ********
+        </span>
+    </div>
+    <form id="password-form" 
+            class="setting-edit-form hidden" 
+            action="/settings/password" 
+            method="POST">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" name="currentPassword" id="currentPassword" required>
+            <label for="newPassword">New Password</label>
+            <input type="password" name="newPassword" id="newPassword" required>
+            <button class="submit-btn" type="submit">Save</button>
+            <button type="button"
+                    class="submit-btn btn-secondary"
+                    onclick="toggleSetting('password-form'); toggleSetting('password-row');">
+                Cancel
+            </button>
+        </form>
+        <!-- Update email -->
+    <div id="email-row"
+         class="setting-row"
+         onclick="toggleSetting('email-form'); toggleSetting('email-row');">
+        <span class="setting-label">Email</span>
+        <span class="setting-value">
+            <%= loggedUser.email %> 
+        </span>
+    </div>
+    <form id="email-form" 
+          class="setting-edit-form hidden" 
+          action="/settings/email" 
+          method="POST">
+        
+        <label for="newEmail">New Email</label>
+        <input type="email" name="newEmail" id="newEmail" required>
+
+        <button class="submit-btn" type="submit">Save</button>
+
+        <button type="button"
+                class="submit-btn btn-secondary"
+                onclick="toggleSetting('email-form'); toggleSetting('email-row');">
+            Cancel
+        </button>
+    </form>
+    
+    <!-- Update full name -->
+    <div id="fullname-row"
+         class="setting-row"
+         onclick="toggleSetting('fullname-form'); toggleSetting('fullname-row');">
+        <span class="setting-label">Full Name</span>
+        <span class="setting-value">
+            <%= loggedUser.firstName %> <%= loggedUser.lastName %>
+        </span>
+    </div>
+    <form id="fullname-form" 
+          class="setting-edit-form hidden" 
+          action="/settings/fullname" 
+          method="POST">
+        
+        <label for="newFirstName">New First Name</label>
+        <input type="text" name="newFirstName" id="newFirstName" required>
+
+        <label for="newLastName">New Last Name</label>
+        <input type="text" name="newLastName" id="newLastName" required>
+
+        <button class="submit-btn" type="submit">Save</button>
+
+        <button type="button"
+                class="submit-btn btn-secondary"
+                onclick="toggleSetting('fullname-form'); toggleSetting('fullname-row');">
+            Cancel
+        </button>
+    </form>
+
+</div>
+
+<script src="/js/settings.js"></script>

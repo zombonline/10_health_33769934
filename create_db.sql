@@ -13,17 +13,22 @@ CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY (user_id)
 );
 
+CREATE TABLE IF NOT EXISTS follows (
+    follower_id INT NOT NULL,
+    followee_id INT NOT NULL,
+    PRIMARY KEY (follower_id, followee_id),
+    FOREIGN KEY (follower_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (followee_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS runs (
     run_id INT AUTO_INCREMENT,
     user_id INT NOT NULL ,
     distance_km DECIMAL(5,2) NOT NULL,
     duration_minutes INT NOT NULL,
     date_of_run DATE NOT NULL,
-    pace_sec_per_km DECIMAL(5,2) NOT NULL,
-    speed_kmh DECIMAL(5,2) NOT NULL,
-    calories INT NOT NULL,
     PRIMARY KEY (run_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS goals (
@@ -36,7 +41,7 @@ CREATE TABLE IF NOT EXISTS goals (
     status ENUM('Active', 'Completed', 'Failed') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (goal_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 # Create the database user and grant permissions

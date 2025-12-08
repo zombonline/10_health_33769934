@@ -4,8 +4,11 @@ const dbUtils = require("../utils/dbUtils");
 const router = express.Router();
 
 // Handle the main routes
-router.get("/", (req, res) => {
-    res.render("index.ejs")
+router.get("/", async (req, res) => {
+    res.render("index.ejs", {
+        recentRuns: req.session.loggedUser ? await dbUtils.getRunsByUserId(req.session.loggedUser.userID, 5, "recent") : [],
+        followingRuns: req.session.loggedUser ? await dbUtils.getRunsByFollowing(req.session.loggedUser.userID, 5) : []
+    })
 }); 
 
 router.get("/about", (req, res) => {
@@ -19,11 +22,17 @@ router.get("/profile/:userID", async (req, res) => {
         // Load the user's runs
         const runs = await dbUtils.getRunsByUserId(user.userID);
 
+        const followersCount = (await dbUtils.getFollowers(user.userID)).length;
+        const followingCount = (await dbUtils.getFollowing(user.userID)).length;
+
         // Render profile page
         res.render("profile.ejs", {
             user,
             runs,
-            isOwner: req.session.loggedUser?.userID == user.userID
+            isOwner: req.session.loggedUser?.userID == user.userID,
+            followersCount,
+            followingCount,
+            isFollowing: req.session.loggedUser ? await dbUtils.isFollowing(req.session.loggedUser.userID, user.userID) : false
         });
 
     } catch (err) {
@@ -31,7 +40,6 @@ router.get("/profile/:userID", async (req, res) => {
         res.status(404).send("User not found");
     }
 });
-
 
 // Export the router object so index.js can access it
 module.exports = router;

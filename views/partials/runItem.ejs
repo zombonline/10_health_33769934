@@ -1,0 +1,41 @@
+
+
+<a href="/runs/<%= run.runID %>" class="run-card-link">
+    <% 
+        if (typeof(showUser) !== 'undefined' && showUser) { %>
+    <div class="run-user-header">
+        <img class="run-user-avatar" 
+            src="<%='/img/default-avatar.png' %>" 
+            alt="<%= run.user.username %>">
+
+        <div>
+            <a href="/profile/<%= run.user.userID %>" class="run-user-name">
+                @<%= run.user.username %>
+            </a>
+            <p class="run-user-fullname"><%= run.user.firstName %> <%= run.user.lastName %></p>
+        </div>
+    </div>
+    <% } %>
+
+    <div class="run-card">
+    <div class="run-card-top">
+        <h3><%= run.name || "Run " + run.runID %></h3>
+        <h2><%= run.distanceKm %> km</h2>
+    </div>
+
+    <div class="run-card-body split">
+        
+        <div class="run-left">
+            <p><strong>Duration:</strong> <%= run.durationMinutes %> minutes</p>
+            <p><strong>Pace:</strong> 
+                <%= (run.durationMinutes * 60 / run.distanceKm).toFixed(0) %> sec/km
+            </p>
+        </div>
+        
+        <div class="run-right">
+            <span class="run-date"><%= run.dateOfRun.toDateString() %></span>
+        </div>
+
+    </div>
+</div>
+</a>

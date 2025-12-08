@@ -1,0 +1,97 @@
+<h1 class="main-title">Run Details</h1>
+
+<div class="run-details-full">
+
+    <!-- MAIN HEADER -->
+    <div class="run-header">
+        <h2><%= run.name || (run.distanceKm + " km Run") %></h2>
+        <p class="run-subdate"><%= run.dateOfRun.toDateString() %></p>
+    </div>
+
+    <!-- USER SECTION -->
+    <section class="run-user-section">
+        <img class="run-user-avatar" 
+             src="<%= user.profileImageUrl || '/img/default-avatar.png' %>" 
+             alt="User Avatar">
+
+        <div class="run-user-info">
+            <p class="run-user-name">
+                <strong><%= user.username %></strong>
+            </p>
+
+            <% if (user.firstName || user.lastName) { %>
+                <p><%= user.firstName %> <%= user.lastName %></p>
+            <% } %>
+
+            <a href="/profile/<%= user.userID %>" class="run-user-link">
+                View Profile →
+            </a>
+        </div>
+    </section>
+
+    <!-- KEY METRICS -->
+    <section class="metrics-section">
+        <h3 class="section-title">Key Stats</h3>
+        
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <h4>Distance</h4>
+                <p><%= run.distanceKm %> km</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Duration</h4>
+                <p><%= run.durationMinutes %> min</p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Pace</h4>
+                <p>
+                    <%= (run.durationMinutes * 60 / run.distanceKm).toFixed(0) %> sec/km
+                </p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Speed</h4>
+                <p>
+                    <%= (run.distanceKm / (run.durationMinutes / 60)).toFixed(2) %> km/h
+                </p>
+            </div>
+
+            <div class="metric-box">
+                <h4>Calories</h4>
+                <% const calories = (Number(run.distanceKm) * 55).toFixed(0); %>
+                <p><%= calories %> kcal</p>
+            </div>
+
+            <% if (run.location) { %>
+            <div class="metric-box">
+                <h4>Location</h4>
+                <p><%= run.location %></p>
+            </div>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- NOTES -->
+    <% if (run.notes) { %>
+    <section class="notes-section">
+        <h3 class="section-title">Notes</h3>
+        <p class="notes-text"><%= run.notes %></p>
+    </section>
+    <% } %>
+
+    <!-- ACTION BUTTONS -->
+    <% if (isOwner) { %>
+    <section class="actions-section">
+        <a href="/runs/<%= run.runID %>/edit" class="submit-btn">Edit Run</a>
+        
+        <form action="/runs/<%= run.runID %>/delete" method="POST" style="display:inline;">
+            <button type="submit" class="submit-btn" style="background:#cc0000;">
+                Delete
+            </button>
+        </form>
+    </section>
+    <% } %>
+
+</div>

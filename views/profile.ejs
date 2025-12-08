@@ -1,17 +1,70 @@
-<div>
-    <h1><%= user.username %>'s Profile</h1>
-    <p>First Name: <%= user.firstName %></p>
-    <p>Last Name: <%= user.lastName %></p>
-    <p>Email: <%= user.email %></p>
-    <!-- list runs here -->
-    <h2><% if (isOwner) { %>Your Runs:<% } else { %><%= user.username %>'s Runs:<% } %></h2>
-    <ul>
-        <% if (runs.length === 0) { %>
-            <li>No runs logged yet.</li>
-        <% } else { %>
-            <% runs.forEach(run => { %>
-                <li>Date: <%= run.dateOfRun.toDateString() %>, Distance: <%= run.distanceKm %> km, Time: <%= run.durationMinutes %> mins</li>
-            <% }) %>
-        <% } %>
-    </ul>
+<div class="profile-card">
+    <div class="profile-top">
+        <img class="profile-avatar" 
+             src="<%= user.profileImageUrl || '/img/default-avatar.png' %>" 
+             alt="Profile Picture">
+        <div class="profile-details">
+            <h1 class="main-title"><%= user.firstName %> <%= user.lastName %></h1>
+            <h3 class="sub-title">@<%= user.username %></h3>
+            <div class="follow-stats">
+                <a href="/followers/<%= user.userID %>">
+                    <strong><%= followersCount %></strong> Followers
+                </a>
+                <a href="/following/<%= user.userID %>">
+                    <strong><%= followingCount %></strong> Following
+                </a>
+            </div>
+                <% if (loggedUser && !isOwner) { %>
+                    <div class="profile-action">
+                        <% if (isFollowing) { %>
+                            <form action="/unfollow/<%= user.userID %>" method="POST">
+                                <button type="submit" class="submit-btn btn-danger">
+                                    Unfollow
+                                </button>
+                            </form>
+                        <% } else { %>
+                            <form action="/follow/<%= user.userID %>" method="POST">
+                                <button type="submit" class="submit-btn">
+                                    Follow
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                <% } %>
+        </div>
+
+    </div>
 </div>
+
+<div class="profile-stats">
+    <div class="stat-box">
+        <h3>Total Runs</h3>
+        <p><%= runs.length %></p>
+    </div>
+    <div class="stat-box">
+        <h3>Total Distance</h3>
+        <p><%= Number(runs.reduce((total, run) => total + Number(run.distanceKm), 0)).toFixed(2) %> km</p>
+    </div>
+    <div class="stat-box">
+        <h3>Longest Run</h3>
+        <p><%= runs.length > 0 ? Math.max(...runs.map(run => Number(run.distanceKm))) : 0 %> km</p>
+    </div>
+</div>
+
+<h2 class="sub-title" style="text-align: center;"><%= isOwner ? "Your Runs" : user.username + "'s Runs" %></h2>
+
+<ul class="runs-list" style ="justify-content: center; flex-wrap: wrap;">
+     <% if (isOwner) { %>
+            <a href="/runs/add" class="submit-btn" style="text-decoration:none; padding:6px 12px; display:inline-block; margin-bottom:10px;">
+                + Add New Run
+            </a>
+    <% } %>
+    <% if (runs.length === 0) { %>
+        <li class="run-item">No runs logged yet.</li>
+    <% } else { %>
+        <% runs.forEach(run => { %>
+            <!-- load runItem partial -->
+            <%- include("partials/runItem", { run: run }) %>
+        <% }) %>
+    <% } %>
+</ul>

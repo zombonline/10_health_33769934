@@ -1,4 +1,35 @@
 <body>
-    <h1 class="main-title"></h1>
-    <h2 class="sub-title">Here are some things that we sell:</h2>
+    <% if(loggedUser) { %>
+        <!-- Greeting -->
+        <h1>Welcome, <%= loggedUser.firstName %>!</h1>
+        <!-- Recent runs (5) -->
+        <h2>Your Recent Runs</h2>
+        <ul class="runs-list" style="justify-content: center; flex-wrap: wrap;">
+            <% if (recentRuns.length === 0) { %>
+                <li class="run-item">No runs logged yet.</li>
+            <% } else { %>
+                <% recentRuns.forEach(run => { %>
+                    <!-- load runItem partial -->
+                    <%- include("partials/runItem", { run: run, showUser: false }) %>
+                <% }) %>
+            <% } %>
+        </ul>
+        <!-- Runs from followed users (5) -->
+        <h2>Runs from Users You Follow</h2>
+        <ul class="runs-list" style="justify-content: center; flex-wrap: wrap
+;">
+            <% if (followingRuns.length === 0) { %>
+                <li class="run-item">No runs from followed users yet.</li>
+            <% } else { %>
+                <% var lastUserID = -1; %>
+                <% followingRuns.forEach(run => { %>
+                    <%- include("partials/runItem", { run: run, showUser: run.user.userID !== lastUserID }) %>
+                    <% lastUserID = run.user.userID; %>
+                <% }) %>
+            <% } %>
+        </ul>
+
+    <% } else { %>
+        <h1>Welcome to the Running Tracker App!</h1>
+    <% } %>
 </body>

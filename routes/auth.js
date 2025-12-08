@@ -7,33 +7,33 @@ const wrap = require("../utils/wrap");
 const { check, validationResult } = require("express-validator");
 const messages = require("../constants/messages");
 const vals = require("../constants/values");
+const redirectLogin = require("../middleware/redirectLogin");
 
 router.get("/", (req, res) => {
   const mode = req.query.mode || "login"; // 'login' or 'register'
+  if(req.session.loggedUser){
+    return res.redirect("/");
+  }
   res.render("auth.ejs", { mode, errorsToDisplay: "" });
 });
-
 router.post("/login", async (req, res) => {
-  try {
-    const creds = await dbUtils.getUserLoginCredentialsByUsername(
-      req.body.username
-    );
-    const match = await bcrypt.compare(req.body.password, creds.hashedPassword);
-    if (!match) {
-      return res.render("auth.ejs", {
-        mode: "login",
-        errorsToDisplay: [messages.AUTH.LOGIN.INVALID_PASSWORD],
-      });
-    }
-    req.session.loggedUser = user;
-    res.send(messages.AUTH.LOGIN.SUCCESS);
-  } catch (err) {
-    console.error(err);
-    res.render("auth.ejs", {
+  const creds = await dbUtils.getUserLoginCredentialsByUsername(req.body.username);
+  if(!creds){
+    return  res.render("auth.ejs", {
       mode: "login",
       errorsToDisplay: [messages.AUTH.LOGIN.USER_NOT_FOUND],
     });
   }
+  const match = await bcrypt.compare(req.body.password, creds.hashedPassword);
+  if (!match) {
+    return res.render("auth.ejs", {
+      mode: "login",
+      errorsToDisplay: [messages.AUTH.LOGIN.INVALID_PASSWORD],
+    });
+  }
+  const user = await dbUtils.getUserByUsername(req.body.username);
+  req.session.loggedUser = user;
+  res.redirect("/");
 });
 router.post(
   "/register",
@@ -72,7 +72,6 @@ router.post(
     res.send(messages.AUTH.REGISTRATION.SUCCESS);
   })
 );
-
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -80,6 +79,9 @@ router.get("/logout", (req, res) => {
     }
     res.redirect("/");
   });
+});
+router.get("/settings", redirectLogin, (req, res) => {
+  res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [] });
 });
 
 module.exports = router;
