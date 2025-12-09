@@ -7,14 +7,14 @@ const router = express.Router();
 router.post("/:targetID", redirectLogin, async (req, res) => {
   const loggedUserID = req.session.loggedUser.userID;
   await dbUtils.follow(loggedUserID, req.params.targetID);
-  res.redirect(`/profile/${req.params.targetID}`);
+  res.redirect(req.get("Referrer"));
 });
 
 // UNFOLLOW
 router.delete("/:targetID", redirectLogin, async (req, res) => {
   const loggedUserID = req.session.loggedUser.userID;
   await dbUtils.unfollow(loggedUserID, req.params.targetID);
-  res.redirect(`/profile/${req.params.targetID}`);
+  res.redirect(req.get("Referrer"));
 });
 
 module.exports = router;

@@ -84,10 +84,8 @@
     <!-- ACTION BUTTONS -->
     <% if (isOwner) { %>
     <section class="actions-section">
-        <a href="/runs/<%= run.runID %>/edit" class="submit-btn">Edit Run</a>
-        
         <form action="/runs/<%= run.runID %>/delete" method="POST" style="display:inline;">
-            <button type="submit" class="submit-btn" style="background:#cc0000;">
+            <button type="submit" class="btn submit-btn" style="background:#cc0000;">
                 Delete
             </button>
         </form>

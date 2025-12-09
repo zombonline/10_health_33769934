@@ -4,6 +4,7 @@ const expressSession = require("express-session");
 const dotenv = require("dotenv");
 const mysql = require("mysql2");
 const methodOverride = require("method-override");
+const expressSanitizer = require("express-sanitizer");
 
 // Create the express application object
 const app = express();
@@ -46,12 +47,17 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(methodOverride("_method"));
 
+app.use(expressSanitizer());
+
 // Set up express-ejs-layouts
 app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
 // Serve static files from the "public" folder
 app.use(express.static("public"));
+
+// Server static files from the "uploads" folder
+app.use("/uploads", express.static("uploads"));
 
 // Load the route handlers
 const mainRoutes = require("./routes/main");

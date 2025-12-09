@@ -1,14 +1,14 @@
 <nav class="navbar">
   <div class="nav-left">
-    <a href="/" class="nav-btn">Home</a>
-    <a href="/about" class="nav-btn">About</a>
+    <a href="/" class="btn nav-btn">Home</a>
+    <a href="/about" class="btn nav-btn">About</a>
     <% if (loggedUser) { %>
-      <a href="/profile/<%= loggedUser.userID %>" class="nav-btn">Profile</a>
-      <a href="/runs/add" class="nav-btn">Add Run</a>
-      <a href="/auth/settings" class="nav-btn">Settings</a>
-      <a href="/auth/logout" class="nav-btn">Logout</a>
+      <a href="/profile/<%= loggedUser.userID %>" class="btn nav-btn">Profile</a>
+      <a href="/runs/add" class="btn nav-btn">Add Run</a>
+      <a href="/auth/settings" class="btn nav-btn">Settings</a>
+      <a href="/auth/logout" class="btn nav-btn">Logout</a>
     <% } else { %>
-      <a href="/auth" class="nav-btn">Register/Login</a>
+      <a href="/auth" class="btn nav-btn">Register/Login</a>
     <% } %>
   </div>
 

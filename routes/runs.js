@@ -8,7 +8,6 @@ router.get("/add", redirectLogin, (req, res) => {
 });
 router.get("/:id", async (req, res) => {
     const run = await dbUtils.getRunById(req.params.id);
-    console.log("Run details:", run);
     const user = run.user;
     res.render("runDetails.ejs", { run, user, isOwner: req.session.loggedUser?.userID == user.userID});
 });

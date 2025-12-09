@@ -28,13 +28,13 @@
         <div class="profile-action" style="margin-left:auto;">
             <% if (isFollowing) { %>
                 <form action="/follow/<%= user.userID %>?_method=DELETE" method="POST">
-                    <button type="submit" class="submit-btn btn-danger">
+                    <button type="submit" class="btn submit-btn btn btn-danger">
                         Unfollow
                     </button>
                 </form>
             <% } else { %>
                 <form action="/follow/<%= user.userID %>" method="POST">
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="btn submit-btn">
                         Follow
                     </button>
                 </form>

@@ -6,6 +6,8 @@ const { check, validationResult } = require("express-validator");
 const messages = require("../constants/messages");
 const values = require("../constants/values");
 const bcrypt = require("bcrypt");
+const upload = require("../middleware/uploadProfilePic");
+const fileUtils = require("../utils/fileUtils");
 
 router.get("/", redirectLogin, (req, res) => {
   res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [] });
@@ -73,5 +75,32 @@ router.post("/fullname", redirectLogin, async (req, res) => {
     req.session.loggedUser.lastName = newLastName;
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY] });
 });
+
+const { saveProfileImage, deleteOldProfileImage, getProfileImageUrl } = require("../utils/fileUtils");
+
+router.post("/profile-picture",
+    redirectLogin,
+    upload.single("profilePic"),
+    async (req, res) => {
+
+        const userID = req.session.loggedUser.userID;
+        const oldUrl = req.session.loggedUser.profileImageUrl;
+
+        // Convert + save image via utils
+        const newUrl = await saveProfileImage(req.file.path, userID);
+
+        // Update DB
+        await dbUtils.updateUserSetting("profile_image_url", newUrl, userID);
+
+        // Update session
+        req.session.loggedUser.profileImageUrl = newUrl;
+
+        // Clean old one
+        deleteOldProfileImage(oldUrl);
+
+        res.redirect("/auth/settings");
+    }
+);
+
 
 module.exports = router;

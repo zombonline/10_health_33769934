@@ -29,4 +29,7 @@ module.exports = {
     UNKNOWN: "An unknown error occurred",
     PERMISSION_DENIED: "You do not have permission to perform this action",
   },
+  SEARCH: {
+    NO_USERS_FOUND: "No users found matching your search criteria",
+  }
 };

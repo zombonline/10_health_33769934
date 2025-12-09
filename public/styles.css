@@ -583,3 +583,10 @@ body {
 .setting-edit-form {
     margin-top: 10px;
 }
+.settings-avatar-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e6f2ff;
+}

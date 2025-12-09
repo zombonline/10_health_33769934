@@ -23,6 +23,7 @@ function mapUser(row) {
     email: row.email,
     firstName: row.first_name,
     lastName: row.last_name,
+    profileImageUrl: row.profile_image_url
   };
 }
 

@@ -17,6 +17,14 @@ router.get("/", (req, res) => {
   res.render("auth.ejs", { mode, errorsToDisplay: "" });
 });
 router.post("/login", async (req, res) => {
+  //check if user exists
+  const existing = await dbUtils.getUserByUsername(req.body.username).catch(() => null);
+  if(!existing){
+    return res.render("auth.ejs", {
+      mode: "login",
+      errorsToDisplay: [messages.AUTH.LOGIN.USER_NOT_FOUND],
+    });
+  }
   const creds = await dbUtils.getUserLoginCredentialsByUsername(req.body.username);
   if(!creds){
     return  res.render("auth.ejs", {

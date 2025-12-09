@@ -1,6 +1,7 @@
 <body>
     <% if(loggedUser) { %>
-        <h1>Welcome, <%= loggedUser.firstName %>!</h1>
+        
+        <h1 class="main-title">Welcome, <%= loggedUser.firstName %>!</h1>
         <h2>Your Recent Runs</h2>
         <%- include("partials/runsList", { runs: recentRuns, showUser: false, runsEmptyMessage: "No recent runs logged yet." }) %>
         <h2>Runs from Users You Follow</h2>
