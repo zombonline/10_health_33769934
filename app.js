@@ -64,6 +64,9 @@ app.use("/auth", authRoutes);
 const runsRoutes = require("./routes/runs");
 app.use("/runs", runsRoutes);
 
+const searchRoutes = require("./routes/search");
+app.use("/search", searchRoutes);
+
 const profileRoutes = require("./routes/profile");
 app.use("/profile", profileRoutes);
 

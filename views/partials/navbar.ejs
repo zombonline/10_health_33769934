@@ -1,12 +1,27 @@
 <nav class="navbar">
-  <a href="/" class="nav-btn">Home</a>
-  <a href="/about" class="nav-btn">About</a>
-  <% if (loggedUser) { %>
-    <a href="/profile/<%= loggedUser.userID %>" class="nav-btn">Profile</a>
-    <a href="/runs/add" class="nav-btn">Add Run</a>
-    <a href="/auth/settings" class="nav-btn">Settings</a>
-    <a href="/auth/logout" class="nav-btn">Logout</a>
-  <% } else { %>
-    <a href="/auth" class="nav-btn">Register/Login</a>
-  <% } %>
+  <div class="nav-left">
+    <a href="/" class="nav-btn">Home</a>
+    <a href="/about" class="nav-btn">About</a>
+    <% if (loggedUser) { %>
+      <a href="/profile/<%= loggedUser.userID %>" class="nav-btn">Profile</a>
+      <a href="/runs/add" class="nav-btn">Add Run</a>
+      <a href="/auth/settings" class="nav-btn">Settings</a>
+      <a href="/auth/logout" class="nav-btn">Logout</a>
+    <% } else { %>
+      <a href="/auth" class="nav-btn">Register/Login</a>
+    <% } %>
+  </div>
+
+  <div class="nav-right">
+    <form action="/search" method="GET" class="nav-search-form">
+      <input 
+        type="text" 
+        name="q" 
+        placeholder="Search users..." 
+        class="nav-search-input" 
+        required
+      >
+      <button type="submit" class="nav-search-btn">🔍</button>
+    </form>
+  </div>
 </nav>

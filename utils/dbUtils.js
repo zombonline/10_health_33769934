@@ -64,6 +64,22 @@ async function getUserLoginCredentialsByUsername(username) {
   };
 }
 
+
+//search users 
+
+async function searchUsers(queryStr) {
+  const rows = await query(
+    "SELECT * FROM users WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ?",
+    [`%${queryStr}%`, `%${queryStr}%`, `%${queryStr}%`]
+  );
+  const users = [];
+  for (const r of rows) {
+    users.push(await getLiteUserProfileByID(r.user_id));
+  }
+  return users;
+}
+
+
 /* -------------------------------------------------------------------------- */
 /*                                  COUNTS                                    */
 /* -------------------------------------------------------------------------- */
@@ -299,4 +315,7 @@ module.exports = {
   // settings
   createUser,
   updateUserSetting,
+
+  // search
+  searchUsers,
 };

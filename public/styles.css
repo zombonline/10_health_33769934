@@ -117,11 +117,20 @@ body {
 .navbar {
     background-color: #0066cc;
     display: flex;
-    justify-content: left;
+    justify-content: space-between; /* LEFT + RIGHT SECTIONS */
+    align-items: center;
     padding: 10px;
     gap: 10px;
 }
 
+.nav-left {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-right {
+    margin-left: auto; /* push search to right */
+}
 .nav-btn {
     color: #004999;
     text-decoration: none;
@@ -137,6 +146,42 @@ body {
 
 .nav-btn.active {
     background: #007bff;
+}
+
+/* SEARCH BAR ------------------------- */
+.nav-search-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-search-input {
+    padding: 7px 10px;
+    border-radius: 4px;
+    border: 1px solid #004999;
+    font-size: 0.9em;
+    width: 180px;
+    outline: none;
+}
+
+.nav-search-input:focus {
+    border-color: #002d66;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+}
+
+.nav-search-btn {
+    background-color: white;
+    color: #004999;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #004999;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: 500;
+}
+
+.nav-search-btn:hover {
+    background-color: #e6f2ff;
 }
 
 /* PROFILE ---------------------------------------------------------- */
@@ -316,7 +361,6 @@ body {
 }
 .run-card-link {
     display: block;
-    text-decoration: none;
 }
 
 .run-card-link .profile-card.tiny {
