@@ -2,10 +2,17 @@
     <% if (users.length === 0) { %>
         <li class="run-item"><%= usersEmptyMessage %></li>
     <% } else { %>
-        <%= console.log("User list containing " + users.length + " users."); %>
-        <%= users.forEach(user => console.log(user)); %>
-        <% users.forEach(user => { %>
-            <%- include("profileCard", { user: user, displayMode: "semi" }) %>
+        <% users.forEach(listUser => { %>
+            <%- include("profileCard", { 
+                user: listUser, 
+                followers: [], 
+                following: [], 
+                runs: [], 
+                loggedUser: loggedUser, 
+                isOwner: loggedUser && loggedUser.userID === listUser.userID, 
+                isFollowing: listUser.isFollowing,
+                displayMode: "compact"
+            }) %>
         <% }) %>
     <% } %>   
 </ul>

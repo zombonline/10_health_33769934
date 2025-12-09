@@ -3,6 +3,7 @@ const express = require("express");
 const expressSession = require("express-session");
 const dotenv = require("dotenv");
 const mysql = require("mysql2");
+const methodOverride = require("method-override");
 
 // Create the express application object
 const app = express();
@@ -43,6 +44,8 @@ app.use((req, res, next) => {
 // Set up the body parser
 app.use(express.urlencoded({ extended: true }));
 
+app.use(methodOverride("_method"));
+
 // Set up express-ejs-layouts
 app.use(expressLayouts);
 app.set("layout", "layouts/main");
@@ -61,8 +64,14 @@ app.use("/auth", authRoutes);
 const runsRoutes = require("./routes/runs");
 app.use("/runs", runsRoutes);
 
+const profileRoutes = require("./routes/profile");
+app.use("/profile", profileRoutes);
+
 const followRoutes = require("./routes/follow");
 app.use("/follow", followRoutes);
+
+const settingsRoutes = require("./routes/settings");
+app.use("/settings", settingsRoutes);
 
 app.use((error, req, res, next) => {
   console.error(error.stack);

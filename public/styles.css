@@ -140,6 +140,16 @@ body {
 }
 
 /* PROFILE ---------------------------------------------------------- */
+.profile-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.profile-card-link:hover .profile-card {
+    background-color: #f5fbff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
 
 .profile-card {
     max-width: 600px;
@@ -150,7 +160,6 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* COMPACT PROFILE CARD (non-full display mode) */
 .profile-card.compact {
     padding: 10px 15px;
 }
@@ -174,9 +183,31 @@ body {
     margin-bottom: 5px;
 }
 
-.profile-card.compact .profile-stats {
-    display: none;   /* ensure stats are hidden even if accidentally rendered */
+.profile-card.tiny {
+    padding: 5px 10px;
+    /* remove box shadow */
+    box-shadow: none;
 }
+
+.profile-card.tiny .profile-avatar {
+    width: 25px;
+    height: 25px;
+}
+
+.profile-card.tiny .profile-top {
+    gap: 5px;
+}
+
+.profile-card.tiny .main-title {
+    font-size: 1em;
+    margin-top: 0;
+}
+
+.profile-card.tiny .sub-title {
+    font-size: 0.75em;
+    margin-bottom: 5px;
+}
+
 
 .profile-top {
     display: flex;
@@ -283,6 +314,15 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+.run-card-link {
+    display: block;
+    text-decoration: none;
+}
+
+.run-card-link .profile-card.tiny {
+    margin-bottom: -4px;
+}
+
 
 .run-user-header {
     display: flex;

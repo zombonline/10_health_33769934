@@ -1,27 +1,22 @@
 
 
+<% if (typeof(showUser) !== 'undefined' && showUser) { %>
+    <%- include("profileCard.ejs", { 
+        user: run.user, 
+        followers: [], 
+        following: [], 
+        loggedUser: loggedUser, 
+        isOwner: false, 
+        isFollowing: false, 
+        displayMode: "tiny" 
+    }) %>
+<% } %>
 <a href="/runs/<%= run.runID %>" class="run-card-link">
-    <% 
-        if (typeof(showUser) !== 'undefined' && showUser) { %>
-    <div class="run-user-header">
-        <img class="run-user-avatar" 
-            src="<%='/img/default-avatar.png' %>" 
-            alt="<%= run.user.username %>">
-
-        <div>
-            <a href="/profile/<%= run.user.userID %>" class="run-user-name">
-                @<%= run.user.username %>
-            </a>
-            <p class="run-user-fullname"><%= run.user.firstName %> <%= run.user.lastName %></p>
-        </div>
-    </div>
-    <% } %>
-
     <div class="run-card">
-    <div class="run-card-top">
-        <h3><%= run.name || "Run " + run.runID %></h3>
-        <h2><%= run.distanceKm %> km</h2>
-    </div>
+        <div class="run-card-top">
+            <h3><%= run.name || "Run " + run.runID %></h3>
+            <h2><%= run.distanceKm %> km</h2>
+        </div>
 
     <div class="run-card-body split">
         

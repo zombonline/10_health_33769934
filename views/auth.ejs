@@ -24,12 +24,4 @@
             </a>
         </div>
     </div>
-    <% if (errorsToDisplay && errorsToDisplay.length > 0) { %>
-        <div class="alert-box error">
-            <ul>
-                <% errorsToDisplay.forEach(function(error) { %>
-                    <li><%= error %></li>
-                <% }); %>
-            </ul>
-        </div>
-    <% } %>
+    <%- include("partials/alertBox", { messagesToDisplay: errorsToDisplay, mode: "error" }) %>

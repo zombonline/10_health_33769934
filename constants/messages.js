@@ -3,7 +3,7 @@ module.exports = {
     LOGIN: {
       SUCCESS: "Login successful",
       FAILED: "Login failed",
-      INVALID_PASSWORD: "Invalid password",
+      INVALID_PASSWORD: "Incorrect password",
       USER_NOT_FOUND: "User not found",
     },
     LOGOUT: {
@@ -20,11 +20,12 @@ module.exports = {
         `Username must be at least ${min} characters long`,
       INVALID_EMAIL: "Invalid email address",
     },
-    MISSING_FIELDS: "Please fill in all required fields",
-    USERNAME_TOO_SHORT: (min) =>
-      `Username must be at least ${min} characters long`,
-    INVALID_EMAIL: "Invalid email address",
-
+    UPDATE: {
+      EMAIL_UPDATED_SUCCESSFULLY: "Email updated successfully",
+      PASSWORD_UPDATED_SUCCESSFULLY: "Password updated successfully",
+      NAME_UPDATED_SUCCESSFULLY: "Name updated successfully",
+      USERNAME_UPDATED_SUCCESSFULLY: "Username updated successfully",
+    },
     UNKNOWN: "An unknown error occurred",
     PERMISSION_DENIED: "You do not have permission to perform this action",
   },

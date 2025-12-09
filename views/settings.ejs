@@ -1,4 +1,11 @@
+<!-- Error or Success Messages -->
+<%- include("partials/alertBox", { messagesToDisplay: errorsToDisplay, mode: "error" }) %>
+<%- include("partials/alertBox", { messagesToDisplay: successMessagesToDisplay, mode: "success" }) %>
+
 <div class="form-container">
+
+
+
     <!-- Update username -->
     <div id="username-row"
          class="setting-row"
