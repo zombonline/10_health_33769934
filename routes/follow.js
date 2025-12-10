@@ -4,16 +4,16 @@ const dbUtils = require("../utils/dbUtils");
 const router = express.Router();
 
 // FOLLOW
-router.post("/:targetID", redirectLogin, async (req, res) => {
-  const loggedUserID = req.session.loggedUser.userID;
-  await dbUtils.follow(loggedUserID, req.params.targetID);
+router.post("/:ID", redirectLogin, async (req, res) => {
+  const ID = req.session.loggedUser.ID;
+  await dbUtils.follow(ID, req.params.ID);
   res.redirect(req.get("Referrer"));
 });
 
 // UNFOLLOW
-router.delete("/:targetID", redirectLogin, async (req, res) => {
-  const loggedUserID = req.session.loggedUser.userID;
-  await dbUtils.unfollow(loggedUserID, req.params.targetID);
+router.delete("/:ID", redirectLogin, async (req, res) => {
+  const ID = req.session.loggedUser.ID;
+  await dbUtils.unfollow(ID, req.params.ID);
   res.redirect(req.get("Referrer"));
 });
 

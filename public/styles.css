@@ -590,3 +590,33 @@ body {
     object-fit: cover;
     border: 2px solid #e6f2ff;
 }
+/* GOALS ------------------------------------------------------------ */
+.goal-card {
+    background: #ffffff;
+    padding: 15px;
+    border-left: 6px solid #0066cc;
+    border-radius: 6px;
+    margin: 12px auto;
+    max-width: 600px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.08);
+}
+
+.goal-card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.goal-card-link:hover .goal-card {
+    background-color: #f5fbff;
+}
+
+.goal-title {
+    margin: 0;
+    font-size: 1.4em;
+    color: #0066cc;
+}
+
+.goal-type, .goal-target, .goal-dates {
+    margin: 6px 0;
+    color: #444;
+}

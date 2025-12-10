@@ -27,6 +27,31 @@ function mapUser(row) {
   };
 }
 
+function mapGoal(row) {
+  return {
+    goalID: row.goal_id,  
+    creatorUserID: row.creator_user_id,
+    title: row.title,
+    description: row.description,
+    goalType: row.goal_type,
+    targetDistanceKm: row.target_distance,
+    targetPace: row.target_pace,
+    startDate: row.start_date,
+    endDate: row.end_date,
+    visibility: row.visibility
+  };
+}
+
+function mapUserGoal(row) {
+  return {
+    userGoalID: row.user_goal_id,
+    userID: row.user_id,
+    goalId: row.goal_id,
+    status: row.status,
+    joinedAt: row.joined_at
+  };
+}
+
 /* -------------------------------------------------------------------------- */
 /*                               BASIC USER LOADERS                            */
 /* -------------------------------------------------------------------------- */
@@ -211,6 +236,60 @@ async function getRunsByFollowing(userID, amount = -1) {
   return amount > 0 ? allRuns.slice(0, amount) : allRuns;
 }
 
+
+//GOALS
+
+async function createGoal(userID, title, description, goalType, targetDistanceKm, targetPace, startDate, endDate, visibility){
+  const result = await query(
+    "INSERT INTO goals (creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date, visibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [userID, title, description, goalType, targetDistanceKm, targetPace, startDate, endDate, visibility]
+  );
+  return result.insertId;
+}
+async function joinGoal(userID, goalId){
+  return query(
+    "INSERT INTO user_goals (user_id, goal_id) VALUES (?, ?)",
+    [userID, goalId]
+  );
+}
+async function leaveGoal(userID, goalId){
+  return query(
+    "DELETE FROM user_goals WHERE user_id = ? AND goal_id = ?",
+    [userID, goalId]
+  );
+}
+async function getGoalById(goalId){
+  const rows = await query("SELECT * FROM goals WHERE goal_id = ?", [goalId]);
+
+  if (rows.length === 0)
+    throw new Error("Goal not found");
+  return mapGoal(rows[0]);
+}
+async function getUserGoalProgress(userID, goalId){
+  const rows = await query(
+    "SELECT * FROM user_goals WHERE user_id = ? AND goal_id = ?",
+    [userID, goalId]
+  );
+  if (rows.length === 0)
+    throw new Error("User goal not found");
+  return mapUserGoal(rows[0]);
+}
+async function getUsersInGoal(goalId){
+  const rows = await query(
+    "SELECT ug.*, u.* FROM user_goals ug JOIN users u ON ug.user_id = u.user_id WHERE ug.goal_id = ?",
+    [goalId]
+  );
+  const usersInGoal = [];
+  for (const r of rows) {
+    usersInGoal.push({
+      user: mapUser(r),
+      userGoalProgress: mapUserGoal(r)
+    });
+  }
+  return usersInGoal;
+}
+
+
 /* -------------------------------------------------------------------------- */
 /*                          FULL / LITE PROFILE LOADERS                        */
 /* -------------------------------------------------------------------------- */
@@ -319,4 +398,12 @@ module.exports = {
 
   // search
   searchUsers,
+
+  // goals
+  createGoal,
+  joinGoal,
+  leaveGoal,
+  getGoalById,
+  getUserGoalProgress,
+  getUsersInGoal
 };

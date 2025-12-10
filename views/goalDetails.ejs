@@ -1,0 +1,16 @@
+<!-- required params (goal, loggedUser, loggedUserGoalProgress, members) -->
+
+<%- include("partials/goalCard", { 
+    goal: goal,
+    loggedUser: loggedUser,
+    userGoalProgress: loggedUserGoalProgress
+}) %>
+
+<h3>Participants</h3>
+<% members.forEach(m => { %>
+    <%- include("partials/goalUserCard", { 
+        user: m.user, 
+        userGoalProgress: m.userGoalProgress, 
+        displayMode: "full" 
+    }) %>
+<% }) %>

@@ -5,6 +5,7 @@
     <% if (loggedUser) { %>
       <a href="/profile/<%= loggedUser.userID %>" class="btn nav-btn">Profile</a>
       <a href="/runs/add" class="btn nav-btn">Add Run</a>
+      <a href="/goals/create" class="btn nav-btn">Create A Goal</a>
       <a href="/auth/settings" class="btn nav-btn">Settings</a>
       <a href="/auth/logout" class="btn nav-btn">Logout</a>
     <% } else { %>

@@ -70,6 +70,9 @@ app.use("/auth", authRoutes);
 const runsRoutes = require("./routes/runs");
 app.use("/runs", runsRoutes);
 
+const goalsRoutes = require("./routes/goals");
+app.use("/goals", goalsRoutes);
+
 const searchRoutes = require("./routes/search");
 app.use("/search", searchRoutes);
 
