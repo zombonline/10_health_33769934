@@ -191,6 +191,7 @@ async function mapRun(row) {
     distanceKm: row.distance_km,
     durationMinutes: row.duration_minutes,
     dateOfRun: row.date_of_run,
+    createdAt: row.created_at
   };
 }
 
@@ -206,7 +207,7 @@ async function getRunById(id) {
 async function getRunsByUserId(id, amount = -1, mode = "recent") {
   let sql = `SELECT * FROM runs WHERE user_id = ?`;
   let order = "";
-  if (mode === "recent") order = " ORDER BY date_of_run DESC";
+  if (mode === "recent") order = " ORDER BY created_at DESC";
   if (mode === "longest") order = " ORDER BY distance_km DESC";
 
   if (amount > 0) order += ` LIMIT ${amount}`;
@@ -288,7 +289,29 @@ async function getUsersInGoal(goalId){
   }
   return usersInGoal;
 }
+async function getGoalsJoinedByUserID(userID) {
+  const rows = await query(
+    "SELECT g.* FROM goals g JOIN user_goals ug ON g.goal_id = ug.goal_id WHERE ug.user_id = ?",
+    [userID]
+  );
+  const goals = [];
+  for (const r of rows) {
+    goals.push(mapGoal(r));
+  }
+  return goals;
+}
 
+async function getGoalsCreatedByUserID(userID) {
+  const rows = await query(
+    "SELECT * FROM goals WHERE creator_user_id = ?",  
+    [userID]
+  );
+  const goals = [];
+  for (const r of rows) {
+    goals.push(mapGoal(r));
+  }
+  return goals;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                          FULL / LITE PROFILE LOADERS                        */
@@ -405,5 +428,7 @@ module.exports = {
   leaveGoal,
   getGoalById,
   getUserGoalProgress,
-  getUsersInGoal
+  getUsersInGoal,
+  getGoalsJoinedByUserID,
+  getGoalsCreatedByUserID,
 };

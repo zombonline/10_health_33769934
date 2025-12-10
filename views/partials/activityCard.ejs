@@ -1,0 +1,73 @@
+<!-- require params (user, activityType (run, joinGoal, createGoal), activityItem, loggedUser, showUser) -->
+
+<% if (showUser) { %>
+
+    <% 
+        console.log(
+            "Displaying activity card, params are:",
+            "user:", user,
+            "activityType:", activityType,
+            "activityItem:", activityItem,
+            "loggedUser:", loggedUser,
+            "showUser:", showUser + "\n\n\n\n"
+        );
+
+        let actionMessage = "performed an activity"; 
+        
+        switch (activityType) {
+            case "run":
+                actionMessage = "logged a new run";
+                break;
+
+            case "joinGoal":
+                actionMessage = "joined a goal";
+                break;
+
+            case "createGoal":
+                actionMessage = "created a new goal";
+                break;
+        }
+    %>
+
+    <%- include("profileCard.ejs", { 
+        user,
+        followers: [],
+        following: [],
+        loggedUser,
+        isOwner: false,
+        isFollowing: false,
+        displayMode: "tiny",
+        actionMessage: actionMessage
+    }) %>
+
+<% } %>
+
+<%
+switch (activityType) {
+
+    case "run":
+%>
+
+    <%- include("runItem.ejs", { 
+        run: activityItem, 
+    }) %>
+
+<%
+        break;
+
+    case "joinGoal":
+    case "createGoal":
+%>
+
+    <%- include("goalCard.ejs", { 
+        goal: activityItem, 
+        showUser: false, 
+        loggedUser,
+        isOwner: false,
+        displayMode: "compact"
+    }) %>
+
+<%
+        break;
+}
+%>

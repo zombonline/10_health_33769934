@@ -1,4 +1,4 @@
-<!-- required params (goal, loggedUser, userGoalProgress) -->
+<!-- required params (goal, loggedUser, userGoalProgress, displayMode) -->
 
 <div class="goal-card">
 
@@ -17,14 +17,11 @@
         <p><strong>To:</strong> <%= goal.endDate.toDateString() %></p>
         <p><strong>Visibility:</strong> <%= goal.visibility %></p>
     </div>
-
+    <% if (displayMode === "full" && userGoalProgress) { %>
     <!-- ACTION BUTTONS -->
     <div class="goal-actions">
-
         <% if (loggedUser) { %>
-
             <% if (loggedUser.userID === goal.creatorUserID) { %>
-
                 <!-- CREATOR: DELETE GOAL -->
                 <form action="/goals/<%= goal.goalID %>?_method=DELETE" method="POST">
                     <button type="submit" class="btn btn-danger">Delete Goal</button>
@@ -53,5 +50,6 @@
         <% } %>
 
     </div>
+    <% } %>
 
 </div>

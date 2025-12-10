@@ -23,10 +23,11 @@ CREATE TABLE IF NOT EXISTS follows (
 
 CREATE TABLE IF NOT EXISTS runs (
     run_id INT AUTO_INCREMENT,
-    user_id INT NOT NULL ,
+    user_id INT NOT NULL,
     distance_km DECIMAL(5,2) NOT NULL,
     duration_minutes INT NOT NULL,
     date_of_run DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (run_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

@@ -1,12 +1,22 @@
+<!-- required params (feed) -->
 <body>
-    <% if(loggedUser) { %>
-        
+    <% if(loggedUser) { %>     
         <h1 class="main-title">Welcome, <%= loggedUser.firstName %>!</h1>
-        <h2>Your Recent Runs</h2>
-        <%- include("partials/runsList", { runs: recentRuns, showUser: false, runsEmptyMessage: "No recent runs logged yet." }) %>
-        <h2>Runs from Users You Follow</h2>
-        <%- include("partials/runsList", { runs: followingRuns, showUser: true, runsEmptyMessage: "No runs from users you follow." }) %>
-    <% } else { %>
-        <h1>Welcome to the Running Tracker App!</h1>
+        <h2>What's happening?</h2>
+        <section class="activity-feed">
+            <% if (feed.length === 0) { %>
+                <p class="empty-message">No recent activities to show. Start logging runs or joining goals!</p>
+            <% } else { %>
+                <% feed.forEach(activity => { %>
+                    <%- include("partials/activityCard.ejs", { 
+                        user: activity.user, 
+                        activityType: activity.type, 
+                        activityItem: activity.item, 
+                        loggedUser: loggedUser, 
+                        showUser: true 
+                    }) %>
+                <% }) %>
+            <% } %>
+        </section>
     <% } %>
 </body>

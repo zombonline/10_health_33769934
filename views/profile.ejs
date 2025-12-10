@@ -5,7 +5,8 @@
     loggedUser: loggedUser, 
     isOwner: isOwner, 
     isFollowing: isFollowing,
-    displayMode: "full"
+    displayMode: "full",
+    actionMessage: null
 }) %>
 
 
@@ -29,7 +30,7 @@
             <p><%= runs.length > 0 ? Math.max(...runs.map(run => Number(run.distanceKm))) : 0 %> km</p>
         </div>
     </div>
-<%- include("partials/runsList", { runs: runs, showUser: false, runsEmptyMessage: "No runs logged yet." }) %>
+<%- include("partials/runsList", { runs: runs, runsEmptyMessage: "No runs logged yet." }) %>
 <% } %>
 <% if (view === "followers") { %>
   <h2 class="sub-title" style="text-align: center;">

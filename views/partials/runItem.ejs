@@ -1,14 +1,5 @@
-<% if (typeof(showUser) !== 'undefined' && showUser) { %>
-    <%- include("profileCard.ejs", { 
-        user: run.user, 
-        followers: [], 
-        following: [], 
-        loggedUser: loggedUser, 
-        isOwner: false, 
-        isFollowing: false, 
-        displayMode: "tiny" 
-    }) %>
-<% } %>
+
+<!-- required params (run) -->
 <a href="/runs/<%= run.runID %>" class="run-card-link">
     <div class="run-card">
         <div class="run-card-top">

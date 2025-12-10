@@ -3,8 +3,7 @@
         <li class="run-item"><%= runsEmptyMessage %></li>
     <% } else { %>
         <% runs.forEach(run => { %>
-            <!-- load runItem partial -->
-            <%- include("runItem", { run: run, showUser: showUser }) %>
+            <%- include("runItem", { run: run}) %>
         <% }) %>
-    <% } %>   <!-- ← this was missing -->
+    <% } %>  
 </ul>

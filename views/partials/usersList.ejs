@@ -11,7 +11,8 @@
                 loggedUser: loggedUser, 
                 isOwner: loggedUser && loggedUser.userID === listUser.userID, 
                 isFollowing: listUser.isFollowing,
-                displayMode: "compact"
+                displayMode: "compact",
+                actionMessage: null
             }) %>
         <% }) %>
     <% } %>   
