@@ -99,7 +99,7 @@ router.post("/profile-picture",
 
                 profilePics.deleteProfileImageByUrl(oldUrl);
 
-                res.redirect("/auth/settings");
+                res.redirect((process.env.BASE_PATH || "") + "/auth/settings");
             } catch (e) {
                 console.error(e);
                 next(e);
