@@ -1,81 +1,143 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const redirectLogin = require("../middleware/redirectLogin");
-const dbUtils = require("../utils/dbUtils");
-const { check, validationResult } = require("express-validator");
-const messages = require("../constants/messages");
-const values = require("../constants/values");
-const bcrypt = require("bcrypt");
-const profilePics = require("../utils/profilePics");
+const redirectLogin = require('../middleware/redirectLogin');
+const dbUtils = require('../utils/dbUtils');
+const { check, validationResult } = require('express-validator');
+const messages = require('../constants/messages');
+const values = require('../constants/values');
+const bcrypt = require('bcrypt');
+const profilePics = require('../utils/profilePics');
 
 // SETTINGS PAGE
-router.get("/", redirectLogin, (req, res) => {
-  res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [] });
+router.get('/', redirectLogin, (req, res) => {
+  res.render('settings.ejs', {
+    errorsToDisplay: [],
+    successMessagesToDisplay: [],
+  });
 });
 
 // UPDATE USERNAME
-router.post("/username", redirectLogin, check("newUsername").isLength({ min: values.MIN_USERNAME_LENGTH }).withMessage(messages.AUTH.REGISTRATION.USERNAME_TOO_SHORT(values.MIN_USERNAME_LENGTH)), async (req, res) => {
+router.post(
+  '/username',
+  redirectLogin,
+  check('newUsername')
+    .isLength({ min: values.MIN_USERNAME_LENGTH })
+    .withMessage(
+      messages.AUTH.REGISTRATION.USERNAME_TOO_SHORT(values.MIN_USERNAME_LENGTH),
+    ),
+  async (req, res) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.render("settings.ejs", { errorsToDisplay: errors.array().map(e => e.msg), successMessagesToDisplay: [] });   
+    if (!errors.isEmpty()) {
+      return res.render('settings.ejs', {
+        errorsToDisplay: errors.array().map((e) => e.msg),
+        successMessagesToDisplay: [],
+      });
     }
     const newUsername = req.body.newUsername;
-    const existing = await dbUtils.getUserByUsername(newUsername).catch(() => null);
+    const existing = await dbUtils
+      .getUserByUsername(newUsername)
+      .catch(() => null);
     if (existing) {
-        return res.render("settings.ejs", {
+      return res.render('settings.ejs', {
         errorsToDisplay: [messages.AUTH.REGISTRATION.USER_EXISTS],
-        successMessagesToDisplay: []
-        });
+        successMessagesToDisplay: [],
+      });
     }
     const userID = req.session.loggedUser.userID;
-    await dbUtils.updateUserSetting("username", newUsername, userID);
+    await dbUtils.updateUserSetting('username', newUsername, userID);
     req.session.loggedUser.username = newUsername;
-    res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.USERNAME_UPDATED_SUCCESSFULLY] });
-});
+    res.render('settings.ejs', {
+      errorsToDisplay: [],
+      successMessagesToDisplay: [
+        messages.AUTH.UPDATE.USERNAME_UPDATED_SUCCESSFULLY,
+      ],
+    });
+  },
+);
 // UPDATE PASSWORD
-router.post("/password", redirectLogin, check("newPassword").isLength({ min: values.MIN_PASSWORD_LENGTH }).withMessage(messages.AUTH.REGISTRATION.PASSWORD_TOO_SHORT(values.MIN_PASSWORD_LENGTH)), async (req, res) => {
+router.post(
+  '/password',
+  redirectLogin,
+  check('newPassword')
+    .isLength({ min: values.MIN_PASSWORD_LENGTH })
+    .withMessage(
+      messages.AUTH.REGISTRATION.PASSWORD_TOO_SHORT(values.MIN_PASSWORD_LENGTH),
+    ),
+  async (req, res) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.render("settings.ejs", { errorsToDisplay: errors.array().map(e => e.msg), successMessagesToDisplay: [] });   
+    if (!errors.isEmpty()) {
+      return res.render('settings.ejs', {
+        errorsToDisplay: errors.array().map((e) => e.msg),
+        successMessagesToDisplay: [],
+      });
     }
     //compare inputted current password with stored hashed password
     const currentPassword = req.body.currentPassword;
     const userID = req.session.loggedUser.userID;
-    const creds = await dbUtils.getUserLoginCredentialsByUsername(req.session.loggedUser.username);
+    const creds = await dbUtils.getUserLoginCredentialsByUsername(
+      req.session.loggedUser.username,
+    );
     const match = await bcrypt.compare(currentPassword, creds.hashedPassword);
-    if (!match) {   
-        return res.render("settings.ejs", { errorsToDisplay: [messages.AUTH.LOGIN.INVALID_PASSWORD], successMessagesToDisplay: [] });
+    if (!match) {
+      return res.render('settings.ejs', {
+        errorsToDisplay: [messages.AUTH.LOGIN.INVALID_PASSWORD],
+        successMessagesToDisplay: [],
+      });
     }
     const newPassword = req.body.newPassword;
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await dbUtils.updateUserSetting("hashed_password", hashedPassword, userID);
-    res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.PASSWORD_UPDATED_SUCCESSFULLY] });
-});
+    await dbUtils.updateUserSetting('hashed_password', hashedPassword, userID);
+    res.render('settings.ejs', {
+      errorsToDisplay: [],
+      successMessagesToDisplay: [
+        messages.AUTH.UPDATE.PASSWORD_UPDATED_SUCCESSFULLY,
+      ],
+    });
+  },
+);
 // UPDATE EMAIL
-router.post("/email", redirectLogin, check("newEmail").isEmail().withMessage(messages.AUTH.REGISTRATION.INVALID_EMAIL), async (req, res) => {
+router.post(
+  '/email',
+  redirectLogin,
+  check('newEmail')
+    .isEmail()
+    .withMessage(messages.AUTH.REGISTRATION.INVALID_EMAIL),
+  async (req, res) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.render("settings.ejs", { errorsToDisplay: errors.array().map(e => e.msg), successMessagesToDisplay: [] });   
-    }   
+    if (!errors.isEmpty()) {
+      return res.render('settings.ejs', {
+        errorsToDisplay: errors.array().map((e) => e.msg),
+        successMessagesToDisplay: [],
+      });
+    }
     const newEmail = req.body.newEmail;
     const userID = req.session.loggedUser.userID;
-    await dbUtils.updateUserSetting("email", newEmail, userID);
-    res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.EMAIL_UPDATED_SUCCESSFULLY] });
-});
+    await dbUtils.updateUserSetting('email', newEmail, userID);
+    res.render('settings.ejs', {
+      errorsToDisplay: [],
+      successMessagesToDisplay: [
+        messages.AUTH.UPDATE.EMAIL_UPDATED_SUCCESSFULLY,
+      ],
+    });
+  },
+);
 // UPDATE FULL NAME
-router.post("/fullname", redirectLogin, async (req, res) => {
-    const newFirstName = req.body.newFirstName || null;
-    const newLastName = req.body.newLastName || null;   
-    const userID = req.session.loggedUser.userID;
-    await dbUtils.updateUserSetting("first_name", newFirstName, userID);
-    await dbUtils.updateUserSetting("last_name", newLastName, userID);
-    req.session.loggedUser.firstName = newFirstName;
-    req.session.loggedUser.lastName = newLastName;
-    res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY] });
+router.post('/fullname', redirectLogin, async (req, res) => {
+  const newFirstName = req.body.newFirstName || null;
+  const newLastName = req.body.newLastName || null;
+  const userID = req.session.loggedUser.userID;
+  await dbUtils.updateUserSetting('first_name', newFirstName, userID);
+  await dbUtils.updateUserSetting('last_name', newLastName, userID);
+  req.session.loggedUser.firstName = newFirstName;
+  req.session.loggedUser.lastName = newLastName;
+  res.render('settings.ejs', {
+    errorsToDisplay: [],
+    successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY],
+  });
 });
 // UPDATE PROFILE PICTURE
 router.post(
-  "/profile-picture",
+  '/profile-picture',
   redirectLogin,
   profilePics.uploadProfilePic,
   async (req, res, next) => {
@@ -84,12 +146,12 @@ router.post(
       const oldUrl = req.session.loggedUser.profileImageUrl;
 
       if (!req.file) {
-        return res.status(400).send("No file uploaded.");
+        return res.status(400).send('No file uploaded.');
       }
 
       const newUrl = profilePics.getProfileImageUrlFromFile(req.file);
 
-      await dbUtils.updateUserSetting("profile_image_url", newUrl, userID);
+      await dbUtils.updateUserSetting('profile_image_url', newUrl, userID);
       req.session.loggedUser.profileImageUrl = newUrl;
 
       // ✅ Only delete if the URL actually changed
@@ -97,14 +159,17 @@ router.post(
         profilePics.deleteProfileImageByUrl(oldUrl);
       }
 
-      res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.PROFILE_PICTURE_UPDATED_SUCCESSFULLY] });
+      res.render('settings.ejs', {
+        errorsToDisplay: [],
+        successMessagesToDisplay: [
+          messages.AUTH.UPDATE.PROFILE_PICTURE_UPDATED_SUCCESSFULLY,
+        ],
+      });
     } catch (err) {
       console.error(err);
       next(err);
     }
-  }
+  },
 );
-
-
 
 module.exports = router;

@@ -1,0 +1,57 @@
+<section class="about-page">
+
+  <div class="about-hero">
+    <img src="/img/runnr_logo.png" alt="Runnr Logo" class="about-logo" />
+    <h1 class="main-title">About Runnr</h1>
+  </div>
+
+  <div class="about-content">
+
+    <section class="about-section">
+      <h2>What is Runnr?</h2>
+      <p>
+        Runnr is a community-powered fitness platform designed to help you stay 
+        motivated, track your progress, and achieve your personal running goals.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>Features</h2>
+      <ul class="about-list">
+        <li><strong>Track Your Runs:</strong> Record your distance, pace, and progress over time.</li>
+        <li><strong>Join Community Goals:</strong> Set goals together with other users and stay accountable.</li>
+        <li><strong>Follow Other Runners:</strong> Share your journey and cheer each other on.</li>
+        <li><strong>Activity Feed:</strong> See what your friends and the community are achieving in real-time.</li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2>Why We Built Runnr</h2>
+      <p>
+        Staying consistent with fitness is hard — but it becomes easier with 
+        community. Runnr was built to make running more social, inspiring, and fun. 
+        Whether you're training for your first 5K or working toward a marathon, 
+        Runnr helps you stay engaged and motivated every step of the way.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>Get Started</h2>
+      <% if (!loggedUser) { %>
+        <p>
+          Ready to start your journey? Create an account and join thousands of other
+          runners working toward their goals.
+        </p>
+        <a href="/auth" class="btn submit-btn">Create Account</a>
+      <% } else { %>
+        <p>
+          You’re already part of the community — keep exploring goals, following 
+          runners, and tracking your progress.
+        </p>
+        <a href="/" class="btn submit-btn">Go to Dashboard</a>
+      <% } %>
+    </section>
+
+  </div>
+
+</section>

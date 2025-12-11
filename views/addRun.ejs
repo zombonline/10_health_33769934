@@ -1,38 +1,34 @@
 <h1 class="main-title">Add a New Run</h1>
-<p class="description">Log your distance, time, and date. Your stats will update automatically.</p>
+<p class="description">
+  Log your distance, time, and date. Your stats will update automatically.
+</p>
 <div class="form-container">
-    <form action="/runs/added" method="POST">
+  <form action="/runs/added" method="POST">
+    <label for="distanceKm">Distance (km)</label>
+    <input
+      type="number"
+      step="0.01"
+      name="distanceKm"
+      id="distanceKm"
+      placeholder="e.g. 5.2"
+      required
+    />
 
-        <label for="distanceKm">Distance (km)</label>
-        <input 
-            type="number" 
-            step="0.01" 
-            name="distanceKm" 
-            id="distanceKm" 
-            placeholder="e.g. 5.2" 
-            required
-        >
+    <label for="durationMinutes">Duration (minutes)</label>
+    <input
+      type="number"
+      step="1"
+      name="durationMinutes"
+      id="durationMinutes"
+      placeholder="e.g. 32"
+      required
+    />
 
-        <label for="durationMinutes">Duration (minutes)</label>
-        <input 
-            type="number" 
-            step="1" 
-            name="durationMinutes" 
-            id="durationMinutes" 
-            placeholder="e.g. 32" 
-            required
-        >
+    <label for="dateOfRun">Date</label>
+    <input type="date" name="dateOfRun" id="dateOfRun" required />
 
-        <label for="dateOfRun">Date</label>
-        <input 
-            type="date" 
-            name="dateOfRun" 
-            id="dateOfRun" 
-            required
-        >
-
-        <div style="text-align:center; margin-top:10px;">
-            <button type="submit" class="btn submit-btn">Save Run</button>
-        </div>
-    </form>
+    <div style="text-align: center; margin-top: 10px">
+      <button type="submit" class="btn submit-btn">Save Run</button>
+    </div>
+  </form>
 </div>

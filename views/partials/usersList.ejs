@@ -1,9 +1,9 @@
-<ul class="runs-list" style="justify-content: center; flex-wrap: wrap;">
-    <% if (users.length === 0) { %>
-        <li class="run-item"><%= usersEmptyMessage %></li>
-    <% } else { %>
-        <% users.forEach(listUser => { %>
-            <%- include("profileCard", { 
+<ul class="runs-list" style="justify-content: center; flex-wrap: wrap">
+  <% if (users.length === 0) { %>
+  <li class="run-item"><%= usersEmptyMessage %></li>
+  <% } else { %>
+  <% users.forEach(listUser => { %>
+  <%- include("profileCard", { 
                 user: listUser, 
                 followers: [], 
                 following: [], 
@@ -14,6 +14,6 @@
                 displayMode: "compact",
                 actionMessage: null
             }) %>
-        <% }) %>
-    <% } %>   
+  <% }) %>
+  <% } %>
 </ul>

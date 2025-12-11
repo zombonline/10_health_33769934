@@ -9,45 +9,54 @@
     actionMessage: null
 }) %>
 
-
 <% if (view === "runs") { %>
-    <h2 class="sub-title" style="text-align: center;"><%= isOwner ? "Your Runs" : user.username + "'s Runs" %></h2>
-    <div class="profile-stats">
-        <div class="stat-box">
-            <h3>Runs this year</h3>
-            <p><%= runs.filter(run => {
-                const runDate = new Date(run.dateOfRun);
-                const currentYear = new Date().getFullYear();
-                return runDate.getFullYear() === currentYear;
-            }).length %></p>
-        </div>
-        <div class="stat-box">
-            <h3>Total Distance</h3>
-            <p><%= Number(runs.reduce((total, run) => total + Number(run.distanceKm), 0)).toFixed(2) %> km</p>
-        </div>
-        <div class="stat-box">
-            <h3>Longest Run</h3>
-            <p><%= runs.length > 0 ? Math.max(...runs.map(run => Number(run.distanceKm))) : 0 %> km</p>
-        </div>
-    </div>
+<h2 class="sub-title" style="text-align: center">
+  <%= isOwner ? "Your Runs" : user.username + "'s Runs" %>
+</h2>
+<div class="profile-stats">
+  <div class="stat-box">
+    <h3>Runs this year</h3>
+    <p>
+      <%= runs.filter(run => { const runDate = new Date(run.dateOfRun); const
+      currentYear = new Date().getFullYear(); return runDate.getFullYear() ===
+      currentYear; }).length %>
+    </p>
+  </div>
+  <div class="stat-box">
+    <h3>Total Distance</h3>
+    <p>
+      <%= Number(runs.reduce((total, run) => total + Number(run.distanceKm),
+      0)).toFixed(2) %> km
+    </p>
+  </div>
+  <div class="stat-box">
+    <h3>Longest Run</h3>
+    <p>
+      <%= runs.length > 0 ? Math.max(...runs.map(run => Number(run.distanceKm)))
+      : 0 %> km
+    </p>
+  </div>
+</div>
 <%- include("partials/runsList", { runs: runs, runsEmptyMessage: "No runs logged yet." }) %>
 <% } %>
 <% if (view === "followers") { %>
-  <h2 class="sub-title" style="text-align: center;">
-    Followers
-  </h2>
+<h2 class="sub-title" style="text-align: center">Followers</h2>
 
-  <%- include("partials/usersList", { 
+<%- include("partials/usersList", { 
         users: followers, 
         usersEmptyMessage: "No followers yet." 
   }) %>
 <% } %>
+<% if (view === "goals") { %>
+<h2 class="sub-title" style="text-align: center">
+  <%= isOwner ? "Your Goals" : user.username + "'s Goals" %>
+</h2>
+<%- include("partials/goalsList", { goals: goals, goalsEmptyMessage: "No goals created yet.", isOwner: isOwner, displayMode: "compact", clickable: true }) %>
+<% } %>
 <% if (view === "following") { %>
-  <h2 class="sub-title" style="text-align: center;">
-    Following
-  </h2>
+<h2 class="sub-title" style="text-align: center">Following</h2>
 
-  <%- include("partials/usersList", { 
+<%- include("partials/usersList", { 
         users: following, 
         usersEmptyMessage: "Not following anyone yet." 
   }) %>

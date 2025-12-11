@@ -1,25 +1,36 @@
-
 <!-- required params (run) -->
 <a href="/runs/<%= run.runID %>" class="run-card-link">
-    <div class="run-card">
-        <div class="run-card-top">
-            <h3><%= run.name || "Run " + run.runID %></h3>
-            <h2><%= run.distanceKm %> km</h2>
-        </div>
+  <div class="run-card">
+    <div class="run-card-top">
+      <h3><%= run.name || "Run " + run.runID %></h3>
+      <h2>
+        <%= run.distanceKm %>
+        km
+      </h2>
+    </div>
 
     <div class="run-card-body split">
-        
-        <div class="run-left">
-            <p><strong>Duration:</strong> <%= run.durationMinutes %> minutes</p>
-            <p><strong>Pace:</strong> 
-                <%= (run.durationMinutes * 60 / run.distanceKm).toFixed(0) %> sec/km
-            </p>
-        </div>
-        
-        <div class="run-right">
-            <span class="run-date"><%= run.dateOfRun.toDateString() %></span>
-        </div>
+      <div class="run-left">
+        <p>
+          <strong>Duration:</strong>
+          <%= run.durationMinutes %>
+          minutes
+        </p>
+        <!-- display in min:Second per km -->
+        <p>
+          <strong>Pace:</strong>
+          <% 
+                    const paceMinutes = Math.floor(run.durationMinutes / run.distanceKm);
+                    const paceSeconds = Math.round(((run.durationMinutes / run.distanceKm) - paceMinutes) * 60);
+                %>
+          <%= paceMinutes %>:<%= paceSeconds.toString().padStart(2, '0') %>
+          min/km
+        </p>
+      </div>
 
+      <div class="run-right">
+        <span class="run-date"><%= run.dateOfRun.toDateString() %></span>
+      </div>
     </div>
-</div>
+  </div>
 </a>

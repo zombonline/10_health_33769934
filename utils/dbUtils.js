@@ -1,5 +1,3 @@
-const db = global.db;
-
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
@@ -8,8 +6,8 @@ function query(sql, params) {
   return new Promise((resolve, reject) => {
     db.query(sql, params, (err, results) => {
       if (err) {
-        console.error("Database error:", err);
-        return reject(new Error("Database error"));
+        console.error('Database error:', err);
+        return reject(new Error('Database error'));
       }
       resolve(results);
     });
@@ -23,65 +21,81 @@ function mapUser(row) {
     email: row.email,
     firstName: row.first_name,
     lastName: row.last_name,
-    profileImageUrl: row.profile_image_url
+    profileImageUrl: row.profile_image_url,
   };
 }
 
 function mapGoal(row) {
   return {
-    goalID: row.goal_id,  
+    goalID: row.goal_id,
     creatorUserID: row.creator_user_id,
     title: row.title,
     description: row.description,
     goalType: row.goal_type,
-    targetDistanceKm: row.target_distance,
-    targetPace: row.target_pace,
-    startDate: row.start_date,
-    endDate: row.end_date,
-    visibility: row.visibility
+    targetDistanceKm: Number(row.target_distance),
+    targetPace: Number(row.target_pace),
+    startDate: new Date(row.start_date),
+    endDate: new Date(row.end_date),
   };
 }
 
 function mapUserGoal(row) {
-  return {
+  let result = {
     userGoalID: row.user_goal_id,
     userID: row.user_id,
     goalId: row.goal_id,
-    status: row.status,
-    joinedAt: row.joined_at
+    goalStatus: row.goal_status,
+    joinedAt: new Date(row.joined_at),
   };
+  return result;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                               BASIC USER LOADERS                            */
 /* -------------------------------------------------------------------------- */
+async function getAllUsers() {
+  const rows = await query('SELECT * FROM users');
+  const users = [];
+  for (const r of rows) {
+    users.push(mapUser(r));
+  }
+  return users;
+}
+
+async function getAllGoals() {
+  const rows = await query('SELECT * FROM goals');
+  const goals = [];
+  for (const r of rows) {
+    goals.push(mapGoal(r));
+  }
+  return goals;
+}
 
 async function getUserById(id) {
-  const rows = await query("SELECT * FROM users WHERE user_id = ?", [id]);
+  const rows = await query('SELECT * FROM users WHERE user_id = ?', [id]);
 
-  if (rows.length === 0)
-    throw new Error("User not found with ID: " + id);
+  if (rows.length === 0) throw new Error('User not found with ID: ' + id);
 
   return mapUser(rows[0]);
 }
 
 async function getUserByUsername(username) {
-  const rows = await query("SELECT * FROM users WHERE username = ?", [username]);
+  const rows = await query('SELECT * FROM users WHERE username = ?', [
+    username,
+  ]);
 
-  if (rows.length === 0)
-    throw new Error("User not found");
+  if (rows.length === 0) throw new Error('User not found');
 
   return mapUser(rows[0]);
 }
 
 async function getUserLoginCredentialsByUsername(username) {
   const rows = await query(
-    "SELECT user_id, username, hashed_password FROM users WHERE username = ?",
-    [username]
+    'SELECT user_id, username, hashed_password FROM users WHERE username = ?',
+    [username],
   );
 
-  if (rows.length === 0)
-    throw new Error("User not found");
+  if (rows.length === 0) throw new Error('User not found');
 
   return {
     userID: rows[0].user_id,
@@ -90,13 +104,12 @@ async function getUserLoginCredentialsByUsername(username) {
   };
 }
 
-
 //search
 
 async function searchUsers(queryStr) {
   const rows = await query(
-    "SELECT * FROM users WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ?",
-    [`%${queryStr}%`, `%${queryStr}%`, `%${queryStr}%`]
+    'SELECT * FROM users WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ?',
+    [`%${queryStr}%`, `%${queryStr}%`, `%${queryStr}%`],
   );
   const users = [];
   for (const r of rows) {
@@ -107,8 +120,8 @@ async function searchUsers(queryStr) {
 
 async function searchGoals(queryStr) {
   const rows = await query(
-    "SELECT * FROM goals WHERE title LIKE ? OR description LIKE ?",
-    [`%${queryStr}%`, `%${queryStr}%`]
+    'SELECT * FROM goals WHERE title LIKE ? OR description LIKE ?',
+    [`%${queryStr}%`, `%${queryStr}%`],
   );
   const goals = [];
   for (const r of rows) {
@@ -117,31 +130,30 @@ async function searchGoals(queryStr) {
   return goals;
 }
 
-
 /* -------------------------------------------------------------------------- */
 /*                                  COUNTS                                    */
 /* -------------------------------------------------------------------------- */
 
 async function getRunCount(userID) {
   const result = await query(
-    "SELECT COUNT(*) AS count FROM runs WHERE user_id = ?",
-    [userID]
+    'SELECT COUNT(*) AS count FROM runs WHERE user_id = ?',
+    [userID],
   );
   return result[0].count;
 }
 
 async function getFollowerCount(userID) {
   const result = await query(
-    "SELECT COUNT(*) AS count FROM follows WHERE followee_id = ?",
-    [userID]
+    'SELECT COUNT(*) AS count FROM follows WHERE followee_id = ?',
+    [userID],
   );
   return result[0].count;
 }
 
 async function getFollowingCount(userID) {
   const result = await query(
-    "SELECT COUNT(*) AS count FROM follows WHERE follower_id = ?",
-    [userID]
+    'SELECT COUNT(*) AS count FROM follows WHERE follower_id = ?',
+    [userID],
   );
   return result[0].count;
 }
@@ -151,23 +163,23 @@ async function getFollowingCount(userID) {
 /* -------------------------------------------------------------------------- */
 
 async function follow(followerID, followeeID) {
-  return query(
-    "INSERT INTO follows (follower_id, followee_id) VALUES (?, ?)",
-    [followerID, followeeID]
-  );
+  return query('INSERT INTO follows (follower_id, followee_id) VALUES (?, ?)', [
+    followerID,
+    followeeID,
+  ]);
 }
 
 async function unfollow(followerID, followeeID) {
   return query(
-    "DELETE FROM follows WHERE follower_id = ? AND followee_id = ?",
-    [followerID, followeeID]
+    'DELETE FROM follows WHERE follower_id = ? AND followee_id = ?',
+    [followerID, followeeID],
   );
 }
 
 async function isFollowing(followerID, followeeID) {
   const rows = await query(
-    "SELECT * FROM follows WHERE follower_id = ? AND followee_id = ?",
-    [followerID, followeeID]
+    'SELECT * FROM follows WHERE follower_id = ? AND followee_id = ?',
+    [followerID, followeeID],
   );
   return rows.length > 0;
 }
@@ -176,20 +188,19 @@ async function isFollowing(followerID, followeeID) {
 
 async function getFollowerIDs(userID) {
   const rows = await query(
-    "SELECT follower_id FROM follows WHERE followee_id = ?",
-    [userID]
+    'SELECT follower_id FROM follows WHERE followee_id = ?',
+    [userID],
   );
 
-  return rows.map(r => r.follower_id);
+  return rows.map((r) => r.follower_id);
 }
 
 async function getFollowingIDs(userID) {
   const rows = await query(
-    "SELECT followee_id FROM follows WHERE follower_id = ?",
-    [userID]
+    'SELECT followee_id FROM follows WHERE follower_id = ?',
+    [userID],
   );
-
-  return rows.map(r => r.followee_id);
+  return rows.map((r) => r.followee_id);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -200,35 +211,33 @@ async function mapRun(row) {
   return {
     runID: row.run_id,
     user: await getUserById(row.user_id), // lightweight
-    distanceKm: row.distance_km,
-    durationMinutes: row.duration_minutes,
-    dateOfRun: row.date_of_run,
-    createdAt: row.created_at
+    distanceKm: Number(row.distance_km),
+    durationMinutes: Number(row.duration_minutes),
+    dateOfRun: new Date(row.date_of_run),
+    createdAt: new Date(row.created_at),
   };
 }
 
 async function getRunById(id) {
-  const rows = await query("SELECT * FROM runs WHERE run_id = ?", [id]);
+  const rows = await query('SELECT * FROM runs WHERE run_id = ?', [id]);
 
-  if (rows.length === 0)
-    throw new Error("Run not found");
+  if (rows.length === 0) throw new Error('Run not found');
 
   return await mapRun(rows[0]);
 }
 
-async function getRunsByUserId(id, amount = -1, mode = "recent") {
+async function getRunsByUserId(id, amount = -1, mode = 'recent') {
   let sql = `SELECT * FROM runs WHERE user_id = ?`;
-  let order = "";
-  if (mode === "recent") order = " ORDER BY created_at DESC";
-  if (mode === "longest") order = " ORDER BY distance_km DESC";
+  let order = '';
+  if (mode === 'recent') order = ' ORDER BY created_at DESC';
+  if (mode === 'longest') order = ' ORDER BY distance_km DESC';
 
   if (amount > 0) order += ` LIMIT ${amount}`;
 
   const rows = await query(sql + order, [id]);
   const runs = [];
 
-  for (const r of rows)
-    runs.push(await mapRun(r));
+  for (const r of rows) runs.push(await mapRun(r));
 
   return runs;
 }
@@ -240,7 +249,7 @@ async function getRunsByFollowing(userID, amount = -1) {
   const allRuns = [];
 
   for (const id of followingIDs) {
-    const userRuns = await getRunsByUserId(id, -1, "recent");
+    const userRuns = await getRunsByUserId(id, -1, 'recent');
     allRuns.push(...userRuns);
   }
 
@@ -249,62 +258,77 @@ async function getRunsByFollowing(userID, amount = -1) {
   return amount > 0 ? allRuns.slice(0, amount) : allRuns;
 }
 
-
 //GOALS
 
-async function createGoal(userID, title, description, goalType, targetDistanceKm, targetPace, startDate, endDate, visibility){
+async function createGoal(
+  userID,
+  title,
+  description,
+  goalType,
+  targetDistanceKm,
+  targetPace,
+  startDate,
+  endDate,
+) {
   const result = await query(
-    "INSERT INTO goals (creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date, visibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [userID, title, description, goalType, targetDistanceKm, targetPace, startDate, endDate, visibility]
+    'INSERT INTO goals (creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      userID,
+      title,
+      description,
+      goalType,
+      targetDistanceKm,
+      targetPace,
+      startDate,
+      endDate,
+    ],
   );
   return result.insertId;
 }
-async function joinGoal(userID, goalId){
-  return query(
-    "INSERT INTO user_goals (user_id, goal_id) VALUES (?, ?)",
-    [userID, goalId]
-  );
+async function joinGoal(userID, goalId) {
+  return query('INSERT INTO user_goals (user_id, goal_id) VALUES (?, ?)', [
+    userID,
+    goalId,
+  ]);
 }
-async function leaveGoal(userID, goalId){
-  return query(
-    "DELETE FROM user_goals WHERE user_id = ? AND goal_id = ?",
-    [userID, goalId]
-  );
+async function leaveGoal(userID, goalId) {
+  return query('DELETE FROM user_goals WHERE user_id = ? AND goal_id = ?', [
+    userID,
+    goalId,
+  ]);
 }
-async function getGoalById(goalId){
-  const rows = await query("SELECT * FROM goals WHERE goal_id = ?", [goalId]);
+async function getGoalById(goalId) {
+  const rows = await query('SELECT * FROM goals WHERE goal_id = ?', [goalId]);
 
-  if (rows.length === 0)
-    throw new Error("Goal not found");
+  if (rows.length === 0) throw new Error('Goal not found');
   return mapGoal(rows[0]);
 }
-async function getUserGoalProgress(userID, goalId){
+async function getUserGoalProgress(userID, goalId) {
   const rows = await query(
-    "SELECT * FROM user_goals WHERE user_id = ? AND goal_id = ?",
-    [userID, goalId]
+    'SELECT * FROM user_goals WHERE user_id = ? AND goal_id = ?',
+    [userID, goalId],
   );
-  if (rows.length === 0)
-    throw new Error("User goal not found");
+  if (rows.length === 0) throw new Error('User goal not found');
   return mapUserGoal(rows[0]);
 }
-async function getUsersInGoal(goalId){
+async function getUsersInGoal(goalId) {
   const rows = await query(
-    "SELECT ug.*, u.* FROM user_goals ug JOIN users u ON ug.user_id = u.user_id WHERE ug.goal_id = ?",
-    [goalId]
+    'SELECT ug.*, u.* FROM user_goals ug JOIN users u ON ug.user_id = u.user_id WHERE ug.goal_id = ?',
+    [goalId],
   );
   const usersInGoal = [];
   for (const r of rows) {
     usersInGoal.push({
       user: mapUser(r),
-      userGoalProgress: mapUserGoal(r)
+      userGoalProgress: mapUserGoal(r),
     });
   }
   return usersInGoal;
 }
 async function getGoalsJoinedByUserID(userID) {
   const rows = await query(
-    "SELECT g.* FROM goals g JOIN user_goals ug ON g.goal_id = ug.goal_id WHERE ug.user_id = ?",
-    [userID]
+    'SELECT g.* FROM goals g JOIN user_goals ug ON g.goal_id = ug.goal_id WHERE ug.user_id = ?',
+    [userID],
   );
   const goals = [];
   for (const r of rows) {
@@ -314,15 +338,24 @@ async function getGoalsJoinedByUserID(userID) {
 }
 
 async function getGoalsCreatedByUserID(userID) {
-  const rows = await query(
-    "SELECT * FROM goals WHERE creator_user_id = ?",  
-    [userID]
-  );
+  const rows = await query('SELECT * FROM goals WHERE creator_user_id = ?', [
+    userID,
+  ]);
   const goals = [];
   for (const r of rows) {
     goals.push(mapGoal(r));
   }
   return goals;
+}
+
+async function updateUserGoalStatus(userGoalID, newStatus) {
+  console.log(
+    `Updating status for userGoalID ${userGoalID} to new status ${newStatus}`,
+  );
+  return query('UPDATE user_goals SET goal_status = ? WHERE user_goal_id = ?', [
+    newStatus,
+    userGoalID,
+  ]);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -349,6 +382,8 @@ async function getFullUserProfileByID(userID, viewerID = null) {
 
   user.runs = await getRunsByUserId(userID);
 
+  user.goals = await getGoalsJoinedByUserID(userID);
+
   const followerIDs = await getFollowerIDs(userID);
   const followingIDs = await getFollowingIDs(userID);
 
@@ -374,23 +409,26 @@ async function getFullUserProfileByID(userID, viewerID = null) {
 
 async function createUser(username, hashedPassword, email) {
   const result = await query(
-    "INSERT INTO users (username, hashed_password, email) VALUES (?, ?, ?)",
-    [username, hashedPassword, email]
+    'INSERT INTO users (username, hashed_password, email) VALUES (?, ?, ?)',
+    [username, hashedPassword, email],
   );
   return getUserById(result.insertId);
 }
 
 async function addRun(userID, distanceKm, durationMinutes, dateOfRun) {
   return query(
-    "INSERT INTO runs (user_id, distance_km, duration_minutes, date_of_run) VALUES (?, ?, ?, ?)",
-    [userID, distanceKm, durationMinutes, dateOfRun]
+    'INSERT INTO runs (user_id, distance_km, duration_minutes, date_of_run) VALUES (?, ?, ?, ?)',
+    [userID, distanceKm, durationMinutes, dateOfRun],
   );
+}
+async function deleteRun(runID) {
+  return query('DELETE FROM runs WHERE run_id = ?', [runID]);
 }
 
 async function updateUserSetting(settingKey, newValue, userID) {
   const result = await query(
     `UPDATE users SET ${settingKey} = ? WHERE user_id = ?`,
-    [newValue, userID]
+    [newValue, userID],
   );
   return result.affectedRows;
 }
@@ -401,6 +439,7 @@ async function updateUserSetting(settingKey, newValue, userID) {
 
 module.exports = {
   // basic
+  getAllUsers,
   getUserById,
   getUserByUsername,
   getUserLoginCredentialsByUsername,
@@ -444,4 +483,7 @@ module.exports = {
   getUsersInGoal,
   getGoalsJoinedByUserID,
   getGoalsCreatedByUserID,
+  getAllGoals,
+  updateUserGoalStatus,
+  deleteRun,
 };

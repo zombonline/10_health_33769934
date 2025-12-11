@@ -1,31 +1,33 @@
 <h1 class="main-title">Results for "<%= searchResults.query %>"</h1>
 
 <div class="search-filters">
-  <a 
-    href="/search?q=<%= searchResults.query %>&type=users" 
-    class="btn btn-secondary <%= searchResults.type === 'users' ? 'active' : '' %>">
+  <a
+    href="/search?q=<%= searchResults.query %>&type=users"
+    class="btn btn-secondary <%= searchResults.type === 'users' ? 'active' : '' %>"
+  >
     Users
   </a>
-  <a 
-    href="/search?q=<%= searchResults.query %>&type=goals" 
-    class="btn btn-secondary <%= searchResults.type === 'goals' ? 'active' : '' %>">
+  <a
+    href="/search?q=<%= searchResults.query %>&type=goals"
+    class="btn btn-secondary <%= searchResults.type === 'goals' ? 'active' : '' %>"
+  >
     Goals
   </a>
 </div>
 
 <% if (searchResults.type === "goals") { %>
-  <% searchResults.results.forEach(goal => { %>
-    <%- include("partials/goalCard.ejs", { 
+<% searchResults.results.forEach(goal => { %>
+<%- include("partials/goalCard.ejs", { 
         goal: goal, 
         loggedUser: loggedUser, 
         userGoalProgress: null, 
         displayMode: "summary", 
         clickable: true 
     }) %>
-  <% }) %>
+<% }) %>
 <% } else if (searchResults.type === "users") { %>
-  <% searchResults.results.forEach(user => { %>
-    <%- include("partials/profileCard.ejs", { 
+<% searchResults.results.forEach(user => { %>
+<%- include("partials/profileCard.ejs", { 
         user: user, 
         followers: [], 
         following: [], 
@@ -35,5 +37,5 @@
         displayMode: "summary", 
         actionMessage: null 
     }) %>
-  <% }) %>    
+<% }) %>
 <% } %>

@@ -1,46 +1,91 @@
 <body>
+  <% if (loggedUser) { %>
+  <h1 class="main-title">
+    Welcome, <%= loggedUser.firstName ? loggedUser.firstName :
+    loggedUser.username %>!
+  </h1>
+  <section class="suggestions">
+    <!-- Suggested Users -->
+    <% if (suggestedUsers && suggestedUsers.length > 0) { %>
+    <h2 class="sub-title">People You May Want to Follow</h2>
+    <div class="suggestion-list">
+      <% suggestedUsers.forEach(sUser => { %>
+      <div class="suggestion-card">
+        <img
+          src="<%= sUser.profileImageUrl || '/img/default-avatar.png' %>"
+          class="suggestion-avatar"
+        />
 
-    <% if (loggedUser) { %>     
+        <div class="suggestion-info">
+          <strong
+            ><%= sUser.firstName ? sUser.firstName + ' ' + sUser.lastName : sUser.username %></strong
+          >
+          <p>@<%= sUser.username %></p>
+        </div>
 
-        <h1 class="main-title">Welcome, <%= loggedUser.firstName ? loggedUser.firstName : loggedUser.username %>!</h1>
-        <h2>What's happening?</h2>
+        <form action="/follow/<%= sUser.userID %>" method="POST">
+          <button type="submit" class="btn submit-btn">Follow</button>
+        </form>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
 
-        <section class="activity-feed">
-            <% if (feed.length === 0) { %>
-                <p class="empty-message">No recent activities to show. Start logging runs or joining goals!</p>
-            <% } else { %>
-                <% feed.forEach(activity => { %>
-                    <%- include("partials/activityCard.ejs", { 
+    <!-- Suggested Goals -->
+    <% if (suggestedGoals && suggestedGoals.length > 0) { %>
+    <h2 class="sub-title">Goals You Might Like</h2>
+    <div class="suggestion-list">
+      <% suggestedGoals.forEach(sGoal => { %>
+      <a
+        href="/goals/<%= sGoal.goalID %>"
+        class="suggestion-card goal-suggestion"
+      >
+        <div class="suggestion-info">
+          <strong><%= sGoal.title %></strong>
+          <p><%= sGoal.description %></p>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+    <% } %>
+  </section>
+  <h2>What's happening?</h2>
+
+  <section class="activity-feed">
+    <% if (feed.length === 0) { %>
+    <p class="empty-message">
+      No recent activities to show. Start logging runs or joining goals!
+    </p>
+    <% } else { %>
+    <% feed.forEach(activity => { %>
+    <%- include("partials/activityCard.ejs", { 
                         user: activity.user, 
                         activityType: activity.type, 
                         activityItem: activity.item, 
                         loggedUser: loggedUser, 
                         showUser: true 
                     }) %>
-                <% }) %>
-            <% } %>
-        </section>
-
-    <% } else { %>
-
-        <!-- 🌟 WELCOME SPLASH SCREEN -->
-        <section class="welcome-splash">
-            <div class="splash-illustration">
-                <img src="/img/runnr_logo.png" alt="Running Illustration">
-            </div>
-            <h1 class="main-title">Welcome to Runnr</h1>
-            <p class="splash-tagline">
-                Track your runs. Join community goals. Stay motivated.
-            </p>
-
-            <div class="splash-buttons">
-                <a href="/auth" class="btn submit-btn">Get Started</a>
-                <a href="/about" class="btn btn-secondary">Learn More</a>
-            </div>
-
-            
-        </section>
-
+    <% }) %>
     <% } %>
+  </section>
 
+  <% } else { %>
+
+  <!-- 🌟 WELCOME SPLASH SCREEN -->
+  <section class="welcome-splash">
+    <div class="splash-illustration">
+      <img src="/img/runnr_logo.png" alt="Running Illustration" />
+    </div>
+    <h1 class="main-title">Welcome to Runnr</h1>
+    <p class="splash-tagline">
+      Track your runs. Join community goals. Stay motivated.
+    </p>
+
+    <div class="splash-buttons">
+      <a href="/auth" class="btn submit-btn">Get Started</a>
+      <a href="/about" class="btn btn-secondary">Learn More</a>
+    </div>
+  </section>
+
+  <% } %>
 </body>

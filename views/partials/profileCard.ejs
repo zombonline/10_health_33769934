@@ -1,89 +1,74 @@
 <!-- required: user, loggedUser, isOwner, isFollowing, displayMode, actionMessage -->
 
 <div class="profile-card <%= displayMode %>">
-
-    <% if (displayMode !== "full") { %>
-    <a href="/profile/<%= user.userID %>" class="profile-card-link">
+  <% if (displayMode !== "full") { %>
+  <a href="/profile/<%= user.userID %>" class="profile-card-link">
     <% } %>
 
     <div class="profile-top">
-        
-        <!-- AVATAR -->
-        <img class="profile-avatar" 
-            src="<%= user.profileImageUrl || '/img/default-avatar.png' %>" 
-            alt="Profile Picture">
-        <!-- DETAILS -->
-        <div class="profile-details">
-            <% 
-                const hasFirst = !!user.firstName;
-                const hasLast = !!user.lastName;
-                const hasFull = hasFirst && hasLast;
+      <!-- AVATAR -->
+      <img
+        class="profile-avatar"
+        src="<%= user.profileImageUrl || '/img/default-avatar.png' %>"
+        alt="Profile Picture"
+      />
+      <!-- DETAILS -->
+      <div class="profile-details">
+        <% const hasFirst = !!user.firstName; const hasLast = !!user.lastName;
+        const hasFull = hasFirst && hasLast; let baseName; if (actionMessage) {
+        // Use first name only OR username baseName = hasFirst ? user.firstName
+        : user.username; } else { // Use full name if available, else username
+        baseName = hasFull ? `${user.firstName} ${user.lastName}` :
+        user.username; } const displayText = actionMessage ? `${baseName}
+        ${actionMessage}` : baseName; %>
 
-                let baseName;
+        <h1 class="main-title"><%= displayText %></h1>
 
-                if (actionMessage) {
-                    // Use first name only OR username
-                    baseName = hasFirst ? user.firstName : user.username;
-                } else {
-                    // Use full name if available, else username
-                    baseName = hasFull ? `${user.firstName} ${user.lastName}` : user.username;
-                }
-
-                const displayText = actionMessage
-                    ? `${baseName} ${actionMessage}`
-                    : baseName;
-            %>
-
-            <h1 class="main-title"><%= displayText %></h1>
-
-            <% if (displayMode !== "tiny") { %>
-                <h3 class="sub-title">@<%= user.username %></h3>
-            <% } %>
-        </div>
-
-
-        <!-- FOLLOW / UNFOLLOW BUTTON -->
-        <% if (displayMode !== 'tiny' && loggedUser && !isOwner) { %>
-        <div class="profile-action" style="margin-left:auto;">
-            <% if (isFollowing) { %>
-                <form action="/follow/<%= user.userID %>?_method=DELETE" method="POST">
-                    <button type="submit" class="btn submit-btn btn btn-danger">
-                        Unfollow
-                    </button>
-                </form>
-            <% } else { %>
-                <form action="/follow/<%= user.userID %>" method="POST">
-                    <button type="submit" class="btn submit-btn">
-                        Follow
-                    </button>
-                </form>
-            <% } %>
-        </div>
+        <% if (displayMode !== "tiny") { %>
+        <h3 class="sub-title">@<%= user.username %></h3>
         <% } %>
+      </div>
 
+      <!-- FOLLOW / UNFOLLOW BUTTON -->
+      <% if (displayMode !== 'tiny' && loggedUser && !isOwner) { %>
+      <div class="profile-action" style="margin-left: auto">
+        <% if (isFollowing) { %>
+        <form action="/follow/<%= user.userID %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn submit-btn btn btn-danger">
+            Unfollow
+          </button>
+        </form>
+        <% } else { %>
+        <form action="/follow/<%= user.userID %>" method="POST">
+          <button type="submit" class="btn submit-btn">Follow</button>
+        </form>
+        <% } %>
+      </div>
+      <% } %>
     </div>
 
     <% if (displayMode !== "full") { %>
+  </a>
+  <% } %>
+
+  <!-- STATS (ONLY FULL MODE) -->
+  <% if (displayMode === "full") { %>
+  <div class="profile-stats">
+    <a href="/profile/<%= user.userID %>?view=followers">
+      <strong><%= user.followersCount ?? followers?.length %></strong> Followers
     </a>
-    <% } %>
 
-    <!-- STATS (ONLY FULL MODE) -->
-    <% if (displayMode === "full") { %>
-    <div class="profile-stats">
+    <a href="/profile/<%= user.userID %>?view=following">
+      <strong><%= user.followingCount ?? following?.length %></strong> Following
+    </a>
 
-        <a href="/profile/<%= user.userID %>?view=followers">
-            <strong><%= user.followersCount ?? followers?.length %></strong> Followers
-        </a>
+    <a href="/profile/<%= user.userID %>?view=runs">
+      <strong><%= user.runsCount ?? runs?.length %></strong> Runs
+    </a>
 
-        <a href="/profile/<%= user.userID %>?view=following">
-            <strong><%= user.followingCount ?? following?.length %></strong> Following
-        </a>
-
-        <a href="/profile/<%= user.userID %>?view=runs">
-            <strong><%= user.runsCount ?? runs?.length %></strong> Runs
-        </a>
-
-    </div>
-    <% } %>
-
+    <a href="/profile/<%= user.userID %>?view=goals">
+      <strong><%= user.goalsCount ?? goals?.length %></strong> Goals
+    </a>
+  </div>
+  <% } %>
 </div>

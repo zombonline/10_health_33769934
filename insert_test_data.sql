@@ -49,22 +49,22 @@ INSERT INTO follows (follower_id, followee_id) VALUES
 
 
 INSERT INTO goals 
-(creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date, visibility, created_at) 
+(creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date, created_at) 
 VALUES
 (1, 'Run a 10K', 'Complete a full 10 km run before Christmas.', 'single',
- 10.00, NULL, '2025-12-01', '2025-12-25', 'public', '2025-11-21 08:32:10'),
+ 10.00, NULL, '2025-12-01', '2025-12-25', '2025-11-21 08:32:10'),
 
 (2, 'Run 50km in December', 'Accumulate 50 km total in December.', 'total',
- 50.00, NULL, '2025-12-01', '2025-12-31', 'public', '2025-11-25 13:44:59'),
+ 50.00, NULL, '2025-12-01', '2025-12-31', '2025-11-25 13:44:59'),
 
 (3, 'Pace Under 5:00', 'Achieve a pace faster than 5:00 min/km.', 'pace',
- NULL, 5.00, '2025-12-05', '2026-01-05', 'public', '2025-11-28 18:05:21'),
+ NULL, 5.00, '2025-12-05', '2026-01-05', '2025-11-28 18:05:21'),
 
 (4, 'Half Marathon Training', 'Train for a 21 km run.', 'total',
- 21.00, NULL, '2025-12-10', '2026-02-01', 'private', '2025-12-03 10:15:47');
+ 21.00, NULL, '2025-12-10', '2026-02-01', '2025-12-03 10:15:47');
 
 
-INSERT INTO user_goals (user_id, goal_id, status, joined_at) VALUES
+INSERT INTO user_goals (user_id, goal_id, goal_status, joined_at) VALUES
 (1, 1, 'incompleted', '2025-11-22 09:14:03'),
 (2, 1, 'incompleted', '2025-11-23 16:55:40'),
 (3, 1, 'incompleted', '2025-11-26 11:22:18'),

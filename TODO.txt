@@ -1,14 +1,18 @@
 
 extend search results page to include filters
 suggest some random users or goals to follow
-remove visibility from goals
-make goals update (cron job and when users logs a run)
-DELETE RUNS?
-FIX PACE DISPLAY TO USE MINUTES INSTEAD OF SECONDS
-DISPLAY GOAL CARDS ON USER PROFILE
+DELETE RUNS? <---------------------------- THIS FIRST
 
 
 UPDATE .ENV ON database
 
 upate password validation
 set gold account to use smiths123ABC$
+
+
+
+DONE
+make goals update (cron job and when users logs a run)
+remove visibility from goals
+FIX PACE DISPLAY TO USE MINUTES INSTEAD OF SECONDS
+DISPLAY GOAL CARDS ON USER PROFILE

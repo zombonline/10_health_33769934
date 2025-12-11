@@ -43,7 +43,6 @@ CREATE TABLE IF NOT EXISTS goals (
     target_pace DECIMAL(5,2),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    visibility ENUM('public','private') DEFAULT 'public',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (creator_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -52,7 +51,7 @@ CREATE TABLE IF NOT EXISTS user_goals (
     user_goal_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     goal_id INT NOT NULL,
-    status ENUM('incompleted','completed','failed') DEFAULT 'incompleted',
+    goal_status ENUM('incompleted','completed','failed') DEFAULT 'incompleted',
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (user_id, goal_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
@@ -61,6 +60,6 @@ CREATE TABLE IF NOT EXISTS user_goals (
 
 
 # Create the database user and grant permissions
-CREATE USER IF NOT EXISTS 'runnr_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
-GRANT ALL PRIVILEGES ON runnr.* TO 'runnr_app'@'localhost';
+CREATE USER IF NOT EXISTS 'health_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
+GRANT ALL PRIVILEGES ON health.* TO 'health_app'@'localhost';
 FLUSH PRIVILEGES;

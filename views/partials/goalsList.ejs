@@ -1,0 +1,14 @@
+<ul class="runs-list" style="justify-content: center; flex-wrap: wrap">
+  <% if (goals.length === 0) { %>
+  <li class="run-item"><%= goalsEmptyMessage %></li>
+  <% } else { %>
+  <% goals.forEach(goal => { %>
+  <%- include("goalCard", { 
+                goal: goal,
+                isOwner: isOwner, 
+                displayMode: displayMode, 
+                clickable: clickable 
+            }) %>
+  <% }) %>
+  <% } %>
+</ul>

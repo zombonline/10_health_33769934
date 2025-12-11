@@ -2,16 +2,7 @@
 
 <% if (showUser) { %>
 
-    <% 
-        console.log(
-            "Displaying activity card, params are:",
-            "user:", user,
-            "activityType:", activityType,
-            "activityItem:", activityItem,
-            "loggedUser:", loggedUser,
-            "showUser:", showUser + "\n\n\n\n"
-        );
-
+<% 
         let actionMessage = "performed an activity"; 
         
         switch (activityType) {
@@ -29,7 +20,7 @@
         }
     %>
 
-    <%- include("profileCard.ejs", { 
+<%- include("profileCard.ejs", { 
         user,
         followers: [],
         following: [],
@@ -48,7 +39,7 @@ switch (activityType) {
     case "run":
 %>
 
-    <%- include("runItem.ejs", { 
+<%- include("runItem.ejs", { 
         run: activityItem, 
     }) %>
 
@@ -59,7 +50,7 @@ switch (activityType) {
     case "createGoal":
 %>
 
-    <%- include("goalCard.ejs", { 
+<%- include("goalCard.ejs", { 
         goal: activityItem, 
         showUser: false, 
         loggedUser,

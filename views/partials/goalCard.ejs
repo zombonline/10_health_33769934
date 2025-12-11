@@ -1,56 +1,71 @@
 <!-- required params (goal, loggedUser, userGoalProgress, displayMode, clickable) -->
 <% if(clickable) { %>
-    <a href="/goals/<%= goal.goalID %>" class="goal-card-link">
-<% } %>
-<div class="goal-card">
+<a href="/goals/<%= goal.goalID %>" class="goal-card-link">
+  <% } %>
+  <div class="goal-card">
     <h2 class="goal-title"><%= goal.title %></h2>
     <p class="goal-description"><%= goal.description %></p>
 
     <div class="goal-details">
-        <p><strong>Type:</strong> <%= goal.goalType %></p>
-        <p><strong>Distance:</strong> <%= goal.targetDistanceKm %> km</p>
-        <% if (goal.goalType === "Pace") { %>
-            <p><strong>Target Pace:</strong> <%= goal.targetPace %> min/km</p>
-        <% } %>
-        <p><strong>From:</strong> <%= goal.startDate.toDateString() %></p>
-        <p><strong>To:</strong> <%= goal.endDate.toDateString() %></p>
-        <p><strong>Visibility:</strong> <%= goal.visibility %></p>
+      <p>
+        <strong>Type:</strong>
+        <%= goal.goalType %>
+      </p>
+      <p>
+        <strong>Distance:</strong>
+        <%= goal.targetDistanceKm %>
+        km
+      </p>
+      <% if (goal.goalType === "Pace") { %>
+      <p>
+        <strong>Target Pace:</strong>
+        <%= goal.targetPace %>
+        min/km
+      </p>
+      <% } %>
+      <p>
+        <strong>From:</strong>
+        <%= goal.startDate.toDateString() %>
+      </p>
+      <p>
+        <strong>To:</strong>
+        <%= goal.endDate.toDateString() %>
+      </p>
     </div>
     <% if (displayMode === "full") { %>
     <!-- ACTION BUTTONS -->
     <div class="goal-actions">
-        <% if (loggedUser) { %>
-            <% if (loggedUser.userID === goal.creatorUserID) { %>
-                <!-- CREATOR: DELETE GOAL -->
-                <form action="/goals/<%= goal.goalID %>?_method=DELETE" method="POST">
-                    <button type="submit" class="btn btn-danger">Delete Goal</button>
-                </form>
+      <% if (loggedUser) { %> <% if (loggedUser.userID === goal.creatorUserID) {
+      %>
+      <!-- CREATOR: DELETE GOAL -->
+      <form action="/goals/<%= goal.goalID %>?_method=DELETE" method="POST">
+        <button type="submit" class="btn btn-danger">Delete Goal</button>
+      </form>
 
-            <% } else { %>
+      <% } else { %>
 
-                <% if (userGoalProgress !== null) { %>
+      <% if (userGoalProgress !== null) { %>
 
-                    <!-- JOINED: LEAVE -->
-                    <form action="/goals/left/<%= goal.goalID %>" method="POST">
-                        <button type="submit" class="btn btn-secondary">Leave Goal</button>
-                    </form>
+      <!-- JOINED: LEAVE -->
+      <form action="/goals/left/<%= goal.goalID %>" method="POST">
+        <button type="submit" class="btn btn-secondary">Leave Goal</button>
+      </form>
 
-                <% } else { %>
+      <% } else { %>
 
-                    <!-- NOT JOINED: JOIN -->
-                    <form action="/goals/joined/<%= goal.goalID %>" method="POST">
-                        <button type="submit" class="btn btn-primary">Join Goal</button>
-                    </form>
+      <!-- NOT JOINED: JOIN -->
+      <form action="/goals/joined/<%= goal.goalID %>" method="POST">
+        <button type="submit" class="btn btn-primary">Join Goal</button>
+      </form>
 
-                <% } %>
+      <% } %>
 
-            <% } %>
+      <% } %>
 
-        <% } %>
-
+      <% } %>
     </div>
     <% } %>
-</div>
-<% if(clickable) { %>
-    </a>
+  </div>
+  <% if(clickable) { %>
+</a>
 <% } %>

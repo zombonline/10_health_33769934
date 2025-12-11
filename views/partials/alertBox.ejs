@@ -1,11 +1,11 @@
 <!-- Required params: messagesToDisplay, messageType(error, success) -->
 
 <% if (messagesToDisplay && messagesToDisplay.length > 0) { %>
-        <div class="alert-box <%=messageType%>">
-            <ul>
-                <% messagesToDisplay.forEach(function(message) { %>
-                    <li><%= message %></li>
-                <% }); %>
-            </ul>
-        </div>
-    <% } %>
+<div class="alert-box <%=messageType%>">
+  <ul>
+    <% messagesToDisplay.forEach(function(message) { %>
+    <li><%= message %></li>
+    <% }); %>
+  </ul>
+</div>
+<% } %>

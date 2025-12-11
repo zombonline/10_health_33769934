@@ -1,27 +1,32 @@
 <h1><%= mode === 'login' ? 'Login' : 'Register' %></h1>
 
 <div class="form-container">
-    <form action="<%= mode === 'login' ? '/auth/login' : '/auth/register' %>" method="POST">
-        <% if (mode === 'register') { %>
-            <input type="text" name="email" placeholder="Email" required>
-            <input type="text" name="firstName" placeholder="First Name">
-            <input type="text" name="lastName" placeholder="Last Name">
-        <% } %>
+  <form
+    action="<%= mode === 'login' ? '/auth/login' : '/auth/register' %>"
+    method="POST"
+  >
+    <% if (mode === 'register') { %>
+    <input type="text" name="email" placeholder="Email" required />
+    <input type="text" name="firstName" placeholder="First Name" />
+    <input type="text" name="lastName" placeholder="Last Name" />
+    <% } %>
 
-        <input type="text" name="username" placeholder="Username" >
-        <input type="password" name="password" placeholder="Password" >
-        <div style="display:flex; justify-content:center;">
-            <button type="submit" class="btn submit-btn">
-            <%= mode === 'login' ? 'Login' : 'Register' %>
-            </button>
-        </div>
-    </form>
-    <div style="display:flex; justify-content:center;">
-        <div style="margin-top:10px; font-size:0.9em; color:#555;">
-            <%= mode === 'login' ? 'Don\'t have an account?' : 'Already have an account?' %>
-            <a href="/auth?<%= mode === 'login' ? 'mode=register' : 'mode=login' %>">
-                <%= mode === 'login' ? 'Register here' : 'Login here' %>
-            </a>
-        </div>
+    <input type="text" name="username" placeholder="Username" />
+    <input type="password" name="password" placeholder="Password" />
+    <div style="display: flex; justify-content: center">
+      <button type="submit" class="btn submit-btn">
+        <%= mode === 'login' ? 'Login' : 'Register' %>
+      </button>
     </div>
-    <%- include("partials/alertBox", { messagesToDisplay: errorsToDisplay, messageType: "error" }) %>
+  </form>
+  <div style="display: flex; justify-content: center">
+    <div style="margin-top: 10px; font-size: 0.9em; color: #555">
+      <%= mode === 'login' ? 'Don\'t have an account?' : 'Already have an
+      account?' %>
+      <a href="/auth?<%= mode === 'login' ? 'mode=register' : 'mode=login' %>">
+        <%= mode === 'login' ? 'Register here' : 'Login here' %>
+      </a>
+    </div>
+  </div>
+  <%- include("partials/alertBox", { messagesToDisplay: errorsToDisplay, messageType: "error" }) %>
+</div>

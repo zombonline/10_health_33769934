@@ -1,31 +1,34 @@
-const express = require("express");
-const dbUtils = require("../utils/dbUtils");
+const express = require('express');
+const dbUtils = require('../utils/dbUtils');
 const router = express.Router();
 
 //VIEW PROFILE
-router.get("/:userID", async (req, res) => {
+router.get('/:userID', async (req, res) => {
   try {
-    const view = req.query.view || "runs"; // "runs" | "followers" | "following"
+    const view = req.query.view || 'runs'; // "runs" | "goals" | "followers" | "following"
 
     const loggedUserID = req.session.loggedUser?.userID || null;
 
     // Fetch profile with all nested data
-    const user = await dbUtils.getFullUserProfileByID(req.params.userID, loggedUserID);
+    const user = await dbUtils.getFullUserProfileByID(
+      req.params.userID,
+      loggedUserID,
+    );
 
-    res.render("profile.ejs", {
+    res.render('profile.ejs', {
       user,
       runs: user.runs,
+      goals: user.goals,
       followers: user.followers,
       following: user.following,
       loggedUser: req.session.loggedUser,
       isOwner: loggedUserID === user.userID,
       isFollowing: user.isFollowing,
-      view
+      view,
     });
-
   } catch (err) {
     console.error(err);
-    res.status(404).send("User not found");
+    res.status(404).send('User not found');
   }
 });
 

@@ -1,48 +1,45 @@
 <!-- required: user, userGoalProgress, displayMode ("full" / "compact" / "tiny") -->
 
 <div class="profile-card <%= displayMode %>">
-
-    <% if (displayMode !== "full") { %>
-    <a href="/profile/<%= user.userID %>" class="profile-card-link">
+  <% if (displayMode !== "full") { %>
+  <a href="/profile/<%= user.userID %>" class="profile-card-link">
     <% } %>
 
     <div class="profile-top">
-        
-        <!-- AVATAR -->
-        <img class="profile-avatar" 
-             src="<%= user.profileImageUrl || '/img/default-avatar.png' %>"
-             alt="Profile Picture">
+      <!-- AVATAR -->
+      <img
+        class="profile-avatar"
+        src="<%= user.profileImageUrl || '/img/default-avatar.png' %>"
+        alt="Profile Picture"
+      />
 
-        <!-- DETAILS -->
-        <div class="profile-details">
+      <!-- DETAILS -->
+      <div class="profile-details">
+        <!-- Name -->
+        <% if (!user.firstName || !user.lastName) { %>
+        <h1 class="main-title"><%= user.username %></h1>
+        <% } else { %>
+        <h1 class="main-title"><%= user.firstName %> <%= user.lastName %></h1>
+        <% } %>
 
-            <!-- Name -->
-            <% if (!user.firstName || !user.lastName) { %>
-                <h1 class="main-title"><%= user.username %></h1>
-            <% } else { %>
-                <h1 class="main-title"><%= user.firstName %> <%= user.lastName %></h1>
-            <% } %>
+        <!-- Username -->
+        <h3 class="sub-title">@<%= user.username %></h3>
 
-            <!-- Username -->
-            <h3 class="sub-title">@<%= user.username %></h3>
-
-            <!-- Goal-specific info -->
-            <% if (displayMode !== "tiny") { %>
-            <p class="goal-user-status">
-                <strong>Status:</strong> <%= userGoalProgress.status %>
-            </p>
-            <p class="goal-user-joined">
-                <strong>Joined:</strong>
-                <%= new Date(userGoalProgress.joinedAt).toLocaleDateString() %>
-            </p>
-            <% } %>
-
-        </div>
-
+        <!-- Goal-specific info -->
+        <% if (displayMode !== "tiny") { %>
+        <p class="goal-user-status">
+          <strong>Status:</strong>
+          <%= userGoalProgress.goalStatus %>
+        </p>
+        <p class="goal-user-joined">
+          <strong>Joined:</strong>
+          <%= new Date(userGoalProgress.joinedAt).toLocaleDateString() %>
+        </p>
+        <% } %>
+      </div>
     </div>
 
     <% if (displayMode !== "full") { %>
-    </a>
-    <% } %>
-
+  </a>
+  <% } %>
 </div>

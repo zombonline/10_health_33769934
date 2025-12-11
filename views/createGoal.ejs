@@ -1,75 +1,76 @@
 <script src="/js/addGoal.js" defer></script>
 <h1 class="main-title">Add a New Goal</h1>
-<p class="description">Set your target distance, time, and date to achieve your running goals.</p>
+<p class="description">
+  Set your target distance, time, and date to achieve your running goals.
+</p>
 
 <div class="form-container">
-    <form action="/goals/created" method="POST">
-        <!-- Goal title -->
-        <label for="title">Goal Title</label>
-        <input 
-            type="text" 
-            name="title" 
-            id="title" 
-            placeholder="e.g. Frank's 10K Challenge" 
-            required
-        >
+  <form action="/goals/created" method="POST">
+    <!-- Goal title -->
+    <label for="title">Goal Title</label>
+    <input
+      type="text"
+      name="title"
+      id="title"
+      placeholder="e.g. Frank's 10K Challenge"
+      required
+    />
 
-        <!-- Goal description -->
-        <label for="description">Goal Description</label>
-        <textarea 
-            name="description" 
-            id="description" 
-            placeholder="Describe your goal..." 
-            rows="4"
-            required
-        ></textarea>
-        
-        <!-- Goal type -->
-        <label for="goalType">Goal Type</label>
-        <select name="goalType" id="goalType" required>
-            <option value="single">Single Distance Goal</option>
-            <option value="total">Total Distance Goal</option>
-            <option value="pace">Pace Goal</option>
-        </select>
+    <!-- Goal description -->
+    <label for="description">Goal Description</label>
+    <textarea
+      name="description"
+      id="description"
+      placeholder="Describe your goal..."
+      rows="4"
+      required
+    ></textarea>
 
-        <!-- Distance Wrapper -->
-        <div id="distanceWrapper">
-            <label id="distanceLabel" for="targetDistanceKm">Target Distance (km)</label>
-            <input 
-                type="number" step="0.01"
-                name="targetDistanceKm" id="targetDistanceKm"
-                placeholder="e.g. 5"
-                required
-            >
-        </div>
+    <!-- Goal type -->
+    <label for="goalType">Goal Type</label>
+    <select name="goalType" id="goalType" required>
+      <option value="single">Single Distance Goal</option>
+      <option value="total">Total Distance Goal</option>
+      <option value="pace">Pace Goal</option>
+    </select>
 
-        <!-- Pace-time Wrapper (only for pace goals) -->
-        <div id="paceWrapper" style="display:none;">
-            <label for="targetTimeMinutes">Target Time (minutes)</label>
-            <input 
-                type="number" step="1"
-                name="targetTimeMinutes" id="targetTimeMinutes"
-                placeholder="e.g. 25"
-            >
-        </div>
+    <!-- Distance Wrapper -->
+    <div id="distanceWrapper">
+      <label id="distanceLabel" for="targetDistanceKm"
+        >Target Distance (km)</label
+      >
+      <input
+        type="number"
+        step="0.01"
+        name="targetDistanceKm"
+        id="targetDistanceKm"
+        placeholder="e.g. 5"
+        required
+      />
+    </div>
 
-        <!-- Start date -->
-        <label for="startDate">Start Date</label>
-        <input type="date" name="startDate" id="startDate" required>
+    <!-- Pace-time Wrapper (only for pace goals) -->
+    <div id="paceWrapper" style="display: none">
+      <label for="targetTimeMinutes">Target Time (minutes)</label>
+      <input
+        type="number"
+        step="1"
+        name="targetTimeMinutes"
+        id="targetTimeMinutes"
+        placeholder="e.g. 25"
+      />
+    </div>
 
-        <!-- End date -->
-        <label for="endDate">End Date</label>
-        <input type="date" name="endDate" id="endDate" required>
+    <!-- Start date -->
+    <label for="startDate">Start Date</label>
+    <input type="date" name="startDate" id="startDate" required />
 
-        <div style="text-align:center; margin-top:10px;">
-            <button type="submit" class="btn submit-btn">Save Goal</button>
-        </div>
-        <!-- Goal Visibility -->
-        <label for="visibility">Goal Visibility</label>
-        <select name="visibility" id="visibility" required>
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-        </select>
+    <!-- End date -->
+    <label for="endDate">End Date</label>
+    <input type="date" name="endDate" id="endDate" required />
 
-    </form>
+    <div style="text-align: center; margin-top: 10px">
+      <button type="submit" class="btn submit-btn">Save Goal</button>
+    </div>
+  </form>
 </div>
