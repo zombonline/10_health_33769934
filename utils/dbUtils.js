@@ -271,7 +271,7 @@ async function createGoal(
   endDate,
 ) {
   const result = await query(
-    'INSERT INTO goals (creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO goals (creator_user_id, title, description, goal_type, target_distance, target_pace, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [
       userID,
       title,

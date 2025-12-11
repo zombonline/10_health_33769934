@@ -31,7 +31,7 @@ router.post('/created', redirectLogin, async (req, res) => {
     endDate,
   );
   await dbUtils.joinGoal(userID, goalID);
-  res.redirect((process.env.BASE_PATH || '') + `/goals/${userID}`);
+  res.redirect((process.env.BASE_PATH || '') + `/goals/${goalID}`);
 });
 //JOINED
 router.post('/joined/:goalId', redirectLogin, async (req, res) => {
