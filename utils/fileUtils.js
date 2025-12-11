@@ -18,6 +18,7 @@ function getProfileImagePath(userID) {
 
 
 function getProfileImageUrl(userID) {
+    console.log("profile image url:", `${PUBLIC_UPLOAD_PATH}/${userID}.png`);
     return `${PUBLIC_UPLOAD_PATH}/${userID}.png`;
 }
 
