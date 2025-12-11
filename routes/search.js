@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     const searchQuery = req.sanitize(req.query.q || "");
     const type = req.query.type || "users"; // users, goals
     const searchResults = await sortUtils.getSearchResults(searchQuery, type);    
-    res.render("searchResults.ejs", { searchResults, usersEmptyMessage: type === "users" ? messages.NO_USERS_FOUND : messages.NO_GOALS_FOUND });
+    res.render("searchResults.ejs", { searchResults, usersEmptyMessage: type === "users" ? messages.SEARCH.NO_USERS_FOUND : messages.SEARCH.NO_GOALS_FOUND });
 });
 
 module.exports = router;

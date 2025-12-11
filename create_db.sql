@@ -1,6 +1,6 @@
 # Create the database
-CREATE DATABASE IF NOT EXISTS runnr;
-USE runnr;
+CREATE DATABASE IF NOT EXISTS health;
+USE health;
 
 # Create the tables
 CREATE TABLE IF NOT EXISTS users (

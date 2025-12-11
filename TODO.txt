@@ -6,3 +6,9 @@ make goals update (cron job and when users logs a run)
 DELETE RUNS?
 FIX PACE DISPLAY TO USE MINUTES INSTEAD OF SECONDS
 DISPLAY GOAL CARDS ON USER PROFILE
+
+
+UPDATE .ENV ON database
+
+upate password validation
+set gold account to use smiths123ABC$

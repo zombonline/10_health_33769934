@@ -1,7 +1,8 @@
-USE runnr;
+USE health;
 
 
 INSERT INTO users (username, hashed_password, first_name, last_name, email) VALUES
+('gold', '$2b$10$rORyNzCI4ILqsZS2JFTsGezKwqSbi2.lhseR6pIZvCdZPGOA2o/aS', 'John', 'Goldmiths', 'john_goldsmiths@example.com'),
 ('Running_Man', '$2b$10$BTh6E3dXAEW75qEoqID/nOfyymj2jn5xyL6ST6aaMcyV2t8vTRfhm', 'Ron', 'Mann', 'Ron.Mann@example.com'),
 ('FastFeet', '$2b$10$Kix1WYGBJ/U6qSg49v0qUuPH8r4.TkC4rnJYOi4xTPammvFOFCU.O', 'Fiona', 'Swift', 'fiona.swift@example.com'),
 ('TrailBlazer', '$2b$10$Kix1WYGBJ/U6qSg49v0qUuPH8r4.TkC4rnJYOi4xTPammvFOFCU.O', 'Tom', 'Baker', 'tom.baker@example.com'),

@@ -1,0 +1,10 @@
+home=http://www.doc.gold.ac.uk/usr/224/
+about=https://www.doc.gold.ac.uk/usr/224/about
+auth=https://www.doc.gold.ac.uk/usr/224/auth
+addrun=https://www.doc.gold.ac.uk/usr/224/runs/add
+creategoal=https://www.doc.gold.ac.uk/usr/224/goals/create
+search=https://www.doc.gold.ac.uk/usr/224/search?q=ron
+profile=https://www.doc.gold.ac.uk/usr/224/profile/1
+run=https://www.doc.gold.ac.uk/usr/224/runs/1
+goal=https://www.doc.gold.ac.uk/usr/224/goals/1
+settings=https://www.doc.gold.ac.uk/usr/224/auth/settings
