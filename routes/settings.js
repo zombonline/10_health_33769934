@@ -154,7 +154,6 @@ router.post(
       await dbUtils.updateUserSetting('profile_image_url', newUrl, userID);
       req.session.loggedUser.profileImageUrl = newUrl;
 
-      // ✅ Only delete if the URL actually changed
       if (oldUrl && oldUrl !== newUrl) {
         profilePics.deleteProfileImageByUrl(oldUrl);
       }

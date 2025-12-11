@@ -8,13 +8,15 @@ const messages = require('../constants/messages');
 const vals = require('../constants/values');
 const redirectLogin = require('../middleware/redirectLogin');
 
+//AUTH PAGE
 router.get('/', (req, res) => {
-  const mode = req.query.mode || 'login'; // 'login' or 'register'
+  const mode = req.query.mode || 'login'; 
   if (req.session.loggedUser) {
     return res.redirect((process.env.BASE_PATH || '') + '/');
   }
   res.render('auth.ejs', { mode, errorsToDisplay: '' });
 });
+//HANDLE LOGIN
 router.post('/login', async (req, res) => {
   //check if user exists
   const existing = await dbUtils
@@ -46,6 +48,7 @@ router.post('/login', async (req, res) => {
   req.session.loggedUser = user;
   res.redirect((process.env.BASE_PATH || '') + '/');
 });
+//HANDLE REGISTRATION
 router.post(
   '/register',
   [
@@ -83,18 +86,13 @@ router.post(
     res.redirect((process.env.BASE_PATH || '') + '/');
   }),
 );
+//HANDLE LOGOUT
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.send(messages.AUTH.LOGOUT.FAILED);
     }
     res.redirect((process.env.BASE_PATH || '') + '/');
-  });
-});
-router.get('/settings', redirectLogin, (req, res) => {
-  res.render('settings.ejs', {
-    errorsToDisplay: [],
-    successMessagesToDisplay: [],
   });
 });
 

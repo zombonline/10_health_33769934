@@ -19,7 +19,6 @@ router.get('/', async (req, res) => {
       3,
     );
   }
-  //randomly select 5 users to suggest
   res.render('index.ejs', {
     feed: feed,
     suggestedUsers,

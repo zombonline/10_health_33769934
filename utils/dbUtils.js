@@ -1,7 +1,3 @@
-/* -------------------------------------------------------------------------- */
-/*                                   HELPERS                                  */
-/* -------------------------------------------------------------------------- */
-
 function query(sql, params) {
   return new Promise((resolve, reject) => {
     db.query(sql, params, (err, results) => {
@@ -40,42 +36,30 @@ function mapGoal(row) {
 }
 
 function mapUserGoal(row) {
-  let result = {
+  return {
     userGoalID: row.user_goal_id,
     userID: row.user_id,
     goalId: row.goal_id,
     goalStatus: row.goal_status,
     joinedAt: new Date(row.joined_at),
   };
-  return result;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                               BASIC USER LOADERS                            */
-/* -------------------------------------------------------------------------- */
+// users
+
 async function getAllUsers() {
   const rows = await query('SELECT * FROM users');
-  const users = [];
-  for (const r of rows) {
-    users.push(mapUser(r));
-  }
-  return users;
+  return rows.map(mapUser);
 }
 
 async function getAllGoals() {
   const rows = await query('SELECT * FROM goals');
-  const goals = [];
-  for (const r of rows) {
-    goals.push(mapGoal(r));
-  }
-  return goals;
+  return rows.map(mapGoal);
 }
 
 async function getUserById(id) {
   const rows = await query('SELECT * FROM users WHERE user_id = ?', [id]);
-
   if (rows.length === 0) throw new Error('User not found with ID: ' + id);
-
   return mapUser(rows[0]);
 }
 
@@ -83,9 +67,7 @@ async function getUserByUsername(username) {
   const rows = await query('SELECT * FROM users WHERE username = ?', [
     username,
   ]);
-
   if (rows.length === 0) throw new Error('User not found');
-
   return mapUser(rows[0]);
 }
 
@@ -94,9 +76,7 @@ async function getUserLoginCredentialsByUsername(username) {
     'SELECT user_id, username, hashed_password FROM users WHERE username = ?',
     [username],
   );
-
   if (rows.length === 0) throw new Error('User not found');
-
   return {
     userID: rows[0].user_id,
     username: rows[0].username,
@@ -104,13 +84,14 @@ async function getUserLoginCredentialsByUsername(username) {
   };
 }
 
-//search
+// search
 
 async function searchUsers(queryStr) {
   const rows = await query(
     'SELECT * FROM users WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ?',
     [`%${queryStr}%`, `%${queryStr}%`, `%${queryStr}%`],
   );
+
   const users = [];
   for (const r of rows) {
     users.push(await getLiteUserProfileByID(r.user_id));
@@ -123,16 +104,10 @@ async function searchGoals(queryStr) {
     'SELECT * FROM goals WHERE title LIKE ? OR description LIKE ?',
     [`%${queryStr}%`, `%${queryStr}%`],
   );
-  const goals = [];
-  for (const r of rows) {
-    goals.push(mapGoal(r));
-  }
-  return goals;
+  return rows.map(mapGoal);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                  COUNTS                                    */
-/* -------------------------------------------------------------------------- */
+// counts
 
 async function getRunCount(userID) {
   const result = await query(
@@ -158,9 +133,7 @@ async function getFollowingCount(userID) {
   return result[0].count;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                             FOLLOW + RELATIONS                              */
-/* -------------------------------------------------------------------------- */
+// follow relationships
 
 async function follow(followerID, followeeID) {
   return query('INSERT INTO follows (follower_id, followee_id) VALUES (?, ?)', [
@@ -184,14 +157,11 @@ async function isFollowing(followerID, followeeID) {
   return rows.length > 0;
 }
 
-/* ----------------------- ID-ONLY follower lists --------------------------- */
-
 async function getFollowerIDs(userID) {
   const rows = await query(
     'SELECT follower_id FROM follows WHERE followee_id = ?',
     [userID],
   );
-
   return rows.map((r) => r.follower_id);
 }
 
@@ -203,14 +173,12 @@ async function getFollowingIDs(userID) {
   return rows.map((r) => r.followee_id);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                  RUNS                                      */
-/* -------------------------------------------------------------------------- */
+// runs
 
 async function mapRun(row) {
   return {
     runID: row.run_id,
-    user: await getUserById(row.user_id), // lightweight
+    user: await getUserById(row.user_id),
     distanceKm: Number(row.distance_km),
     durationMinutes: Number(row.duration_minutes),
     dateOfRun: new Date(row.date_of_run),
@@ -220,25 +188,22 @@ async function mapRun(row) {
 
 async function getRunById(id) {
   const rows = await query('SELECT * FROM runs WHERE run_id = ?', [id]);
-
   if (rows.length === 0) throw new Error('Run not found');
-
-  return await mapRun(rows[0]);
+  return mapRun(rows[0]);
 }
 
 async function getRunsByUserId(id, amount = -1, mode = 'recent') {
-  let sql = `SELECT * FROM runs WHERE user_id = ?`;
+  let sql = 'SELECT * FROM runs WHERE user_id = ?';
   let order = '';
+
   if (mode === 'recent') order = ' ORDER BY created_at DESC';
   if (mode === 'longest') order = ' ORDER BY distance_km DESC';
-
   if (amount > 0) order += ` LIMIT ${amount}`;
 
   const rows = await query(sql + order, [id]);
   const runs = [];
 
   for (const r of rows) runs.push(await mapRun(r));
-
   return runs;
 }
 
@@ -254,11 +219,10 @@ async function getRunsByFollowing(userID, amount = -1) {
   }
 
   allRuns.sort((a, b) => new Date(b.dateOfRun) - new Date(a.dateOfRun));
-
   return amount > 0 ? allRuns.slice(0, amount) : allRuns;
 }
 
-//GOALS
+// goals
 
 async function createGoal(
   userID,
@@ -285,24 +249,27 @@ async function createGoal(
   );
   return result.insertId;
 }
+
 async function joinGoal(userID, goalId) {
   return query('INSERT INTO user_goals (user_id, goal_id) VALUES (?, ?)', [
     userID,
     goalId,
   ]);
 }
+
 async function leaveGoal(userID, goalId) {
   return query('DELETE FROM user_goals WHERE user_id = ? AND goal_id = ?', [
     userID,
     goalId,
   ]);
 }
+
 async function getGoalById(goalId) {
   const rows = await query('SELECT * FROM goals WHERE goal_id = ?', [goalId]);
-
   if (rows.length === 0) throw new Error('Goal not found');
   return mapGoal(rows[0]);
 }
+
 async function getUserGoalProgress(userID, goalId) {
   const rows = await query(
     'SELECT * FROM user_goals WHERE user_id = ? AND goal_id = ?',
@@ -311,11 +278,13 @@ async function getUserGoalProgress(userID, goalId) {
   if (rows.length === 0) throw new Error('User goal not found');
   return mapUserGoal(rows[0]);
 }
+
 async function getUsersInGoal(goalId) {
   const rows = await query(
     'SELECT ug.*, u.* FROM user_goals ug JOIN users u ON ug.user_id = u.user_id WHERE ug.goal_id = ?',
     [goalId],
   );
+
   const usersInGoal = [];
   for (const r of rows) {
     usersInGoal.push({
@@ -325,27 +294,20 @@ async function getUsersInGoal(goalId) {
   }
   return usersInGoal;
 }
+
 async function getGoalsJoinedByUserID(userID) {
   const rows = await query(
     'SELECT g.* FROM goals g JOIN user_goals ug ON g.goal_id = ug.goal_id WHERE ug.user_id = ?',
     [userID],
   );
-  const goals = [];
-  for (const r of rows) {
-    goals.push(mapGoal(r));
-  }
-  return goals;
+  return rows.map(mapGoal);
 }
 
 async function getGoalsCreatedByUserID(userID) {
   const rows = await query('SELECT * FROM goals WHERE creator_user_id = ?', [
     userID,
   ]);
-  const goals = [];
-  for (const r of rows) {
-    goals.push(mapGoal(r));
-  }
-  return goals;
+  return rows.map(mapGoal);
 }
 
 async function updateUserGoalStatus(userGoalID, newStatus) {
@@ -358,9 +320,7 @@ async function updateUserGoalStatus(userGoalID, newStatus) {
   ]);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                          FULL / LITE PROFILE LOADERS                        */
-/* -------------------------------------------------------------------------- */
+// profiles
 
 async function getLiteUserProfileByID(userID, viewerID = null) {
   const user = await getUserById(userID);
@@ -381,19 +341,20 @@ async function getFullUserProfileByID(userID, viewerID = null) {
   const user = await getUserById(userID);
 
   user.runs = await getRunsByUserId(userID);
-
   user.goals = await getGoalsJoinedByUserID(userID);
 
   const followerIDs = await getFollowerIDs(userID);
   const followingIDs = await getFollowingIDs(userID);
 
   user.followers = [];
-  for (const id of followerIDs)
+  for (const id of followerIDs) {
     user.followers.push(await getLiteUserProfileByID(id, viewerID));
+  }
 
   user.following = [];
-  for (const id of followingIDs)
+  for (const id of followingIDs) {
     user.following.push(await getLiteUserProfileByID(id, viewerID));
+  }
 
   user.isFollowing =
     viewerID && viewerID !== userID
@@ -403,9 +364,7 @@ async function getFullUserProfileByID(userID, viewerID = null) {
   return user;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              MUTATION HELPERS                               */
-/* -------------------------------------------------------------------------- */
+// mutations
 
 async function createUser(username, hashedPassword, email) {
   const result = await query(
@@ -421,6 +380,7 @@ async function addRun(userID, distanceKm, durationMinutes, dateOfRun) {
     [userID, distanceKm, durationMinutes, dateOfRun],
   );
 }
+
 async function deleteRun(runID) {
   return query('DELETE FROM runs WHERE run_id = ?', [runID]);
 }
@@ -433,48 +393,36 @@ async function updateUserSetting(settingKey, newValue, userID) {
   return result.affectedRows;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                   EXPORTS                                   */
-/* -------------------------------------------------------------------------- */
-
 module.exports = {
-  // basic
   getAllUsers,
   getUserById,
   getUserByUsername,
   getUserLoginCredentialsByUsername,
 
-  // runs
   getRunById,
   getRunsByUserId,
   getRunsByFollowing,
   addRun,
 
-  // relationships
   follow,
   unfollow,
   isFollowing,
   getFollowerIDs,
   getFollowingIDs,
 
-  // counts
   getRunCount,
   getFollowerCount,
   getFollowingCount,
 
-  // profiles
   getLiteUserProfileByID,
   getFullUserProfileByID,
 
-  // settings
   createUser,
   updateUserSetting,
 
-  // search
   searchUsers,
   searchGoals,
 
-  // goals
   createGoal,
   joinGoal,
   leaveGoal,
