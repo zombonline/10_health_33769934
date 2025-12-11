@@ -75,38 +75,37 @@ router.post("/fullname", redirectLogin, async (req, res) => {
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY] });
 });
 
-router.post("/profile-picture",
-    redirectLogin,
-    (req, res, next) => {
-        profilePics.uploadProfilePic(req, res, async (err) => {
-            if (err) {
-                console.error("Upload error:", err);
-                return res.status(400).send("Something went wrong uploading the file.");
-            }
+router.post(
+  "/profile-picture",
+  redirectLogin,
+  profilePics.uploadProfilePic,
+  async (req, res, next) => {
+    try {
+      const userID = req.session.loggedUser.userID;
+      const oldUrl = req.session.loggedUser.profileImageUrl;
 
-            if (!req.file) {
-                return res.status(400).send("No file uploaded.");
-            }
+      if (!req.file) {
+        return res.status(400).send("No file uploaded.");
+      }
 
-            try {
-                const userID = req.session.loggedUser.userID;
-                const oldUrl = req.session.loggedUser.profileImageUrl;
+      const newUrl = profilePics.getProfileImageUrlFromFile(req.file);
 
-                const newUrl = profilePics.getProfileImageUrlFromFile(req.file);
+      await dbUtils.updateUserSetting("profile_image_url", newUrl, userID);
+      req.session.loggedUser.profileImageUrl = newUrl;
 
-                await dbUtils.updateUserSetting("profile_image_url", newUrl, userID);
-                req.session.loggedUser.profileImageUrl = newUrl;
+      // ✅ Only delete if the URL actually changed
+      if (oldUrl && oldUrl !== newUrl) {
+        profilePics.deleteProfileImageByUrl(oldUrl);
+      }
 
-                profilePics.deleteProfileImageByUrl(oldUrl);
-
-                res.redirect((process.env.BASE_PATH || "") + "/auth/settings");
-            } catch (e) {
-                console.error(e);
-                next(e);
-            }
-        });
+      res.redirect("/auth/settings");
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
+  }
 );
+
 
 
 module.exports = router;
