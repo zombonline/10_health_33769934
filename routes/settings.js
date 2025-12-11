@@ -6,8 +6,7 @@ const { check, validationResult } = require("express-validator");
 const messages = require("../constants/messages");
 const values = require("../constants/values");
 const bcrypt = require("bcrypt");
-const upload = require("../middleware/uploadProfilePic");
-const fileUtils = require("../utils/fileUtils");
+const profilePics = require("../utils/profilePics");
 
 router.get("/", redirectLogin, (req, res) => {
   res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [] });
@@ -76,29 +75,36 @@ router.post("/fullname", redirectLogin, async (req, res) => {
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY] });
 });
 
-const { saveProfileImage, deleteOldProfileImage } = require("../utils/fileUtils");
-
 router.post("/profile-picture",
     redirectLogin,
-    upload.single("profilePic"),
-    async (req, res) => {
+    (req, res, next) => {
+        profilePics.uploadProfilePic(req, res, async (err) => {
+            if (err) {
+                console.error("Upload error:", err);
+                return res.status(400).send("Something went wrong uploading the file.");
+            }
 
-        const userID = req.session.loggedUser.userID;
-        const oldUrl = req.session.loggedUser.profileImageUrl;
+            if (!req.file) {
+                return res.status(400).send("No file uploaded.");
+            }
 
-        // Convert + save image via utils
-        const newUrl = await saveProfileImage(req.file.path, userID);
+            try {
+                const userID = req.session.loggedUser.userID;
+                const oldUrl = req.session.loggedUser.profileImageUrl;
 
-        // Update DB
-        await dbUtils.updateUserSetting("profile_image_url", newUrl, userID);
+                const newUrl = profilePics.getProfileImageUrlFromFile(req.file);
 
-        // Update session
-        req.session.loggedUser.profileImageUrl = newUrl;
+                await dbUtils.updateUserSetting("profile_image_url", newUrl, userID);
+                req.session.loggedUser.profileImageUrl = newUrl;
 
-        // Clean old one
-        deleteOldProfileImage(oldUrl);
+                profilePics.deleteProfileImageByUrl(oldUrl);
 
-        res.redirect((process.env.BASE_PATH || '') + "/auth/settings");
+                res.redirect("/auth/settings");
+            } catch (e) {
+                console.error(e);
+                next(e);
+            }
+        });
     }
 );
 

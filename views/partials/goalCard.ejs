@@ -17,7 +17,7 @@
         <p><strong>To:</strong> <%= goal.endDate.toDateString() %></p>
         <p><strong>Visibility:</strong> <%= goal.visibility %></p>
     </div>
-    <% if (displayMode === "full" && userGoalProgress) { %>
+    <% if (displayMode === "full") { %>
     <!-- ACTION BUTTONS -->
     <div class="goal-actions">
         <% if (loggedUser) { %>

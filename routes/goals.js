@@ -12,20 +12,20 @@ router.post("/created", redirectLogin, async (req, res) => {
     const { title, description, goalType, targetDistanceKm, targetPace, startDate, endDate, visibility } = req.body;
     const goalID = await dbUtils.createGoal(userID, title, description, goalType, targetDistanceKm, targetPace, startDate, endDate, visibility);
     await dbUtils.joinGoal(userID, goalID);
-    res.redirect(`/goals/${userID}`);
+    res.redirect((process.env.BASE_PATH || '') + `/goals/${userID}`);
 });
 router.post("/joined/:goalId", redirectLogin, async (req, res) => {
     const userID = req.session.loggedUser.userID;
     const goalId = req.params.goalId;
     await dbUtils.joinGoal(userID, goalId);
-    res.redirect(`/goals/${goalId}`);
+    res.redirect((process.env.BASE_PATH || '') + `/goals/${goalId}`);
 });
 router.post("/left/:goalId", redirectLogin, async (req, res) => {
     const userID = req.session.loggedUser.userID;
     const goalId = req.params.goalId;
 
     await dbUtils.leaveGoal(userID, goalId);
-    res.redirect(`/goals/${goalId}`);
+    res.redirect((process.env.BASE_PATH || '') + `/goals/${goalId}`);
 });
 
 router.get("/:goalId", async (req, res) => {
