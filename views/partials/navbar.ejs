@@ -1,16 +1,11 @@
+<script src="/js/navbar.js" defer></script>
 <nav class="navbar">
   <div class="nav-left">
+    <a href="/" class="nav-logo">
+      <!-- style to ensure logo is properly sized and aligned -->
+      <img src="/img/runnr_logo.png" alt="Runnr Logo" class="nav-logo-img">
     <a href="/" class="btn nav-btn">Home</a>
     <a href="/about" class="btn nav-btn">About</a>
-    <% if (loggedUser) { %>
-      <a href="/profile/<%= loggedUser.userID %>" class="btn nav-btn">Profile</a>
-      <a href="/runs/add" class="btn nav-btn">Add Run</a>
-      <a href="/goals/create" class="btn nav-btn">Create A Goal</a>
-      <a href="/auth/settings" class="btn nav-btn">Settings</a>
-      <a href="/auth/logout" class="btn nav-btn">Logout</a>
-    <% } else { %>
-      <a href="/auth" class="btn nav-btn">Register/Login</a>
-    <% } %>
   </div>
 
   <div class="nav-right">
@@ -18,11 +13,33 @@
       <input 
         type="text" 
         name="q" 
-        placeholder="Search users..." 
+        placeholder="Search users/goals..." 
         class="nav-search-input" 
         required
       >
       <button type="submit" class="nav-search-btn">🔍</button>
     </form>
+
+    <% if (loggedUser) { %>
+      <div class="nav-user-menu">
+        <button class="nav-avatar-btn" id="navUserToggle">
+          <img 
+            src="<%= loggedUser.profileImageUrl || '/img/default-avatar.png' %>" 
+            alt="Profile Picture"
+          >
+        </button>
+
+
+        <div class="nav-user-dropdown" id="navUserDropdown">
+          <a href="/profile/<%= loggedUser.userID %>" class="nav-dropdown-link">Profile</a>
+          <a href="/runs/add" class="nav-dropdown-link">Add Run</a>
+          <a href="/goals/create" class="nav-dropdown-link">Create a Goal</a>
+          <a href="/auth/settings" class="nav-dropdown-link">Settings</a>
+          <a href="/auth/logout" class="nav-dropdown-link">Logout</a>
+        </div>
+      </div>
+    <% } else { %>
+      <a href="/auth" class="btn nav-btn">Register/Login</a>
+    <% } %>
   </div>
 </nav>

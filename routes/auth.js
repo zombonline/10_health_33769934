@@ -77,7 +77,7 @@ router.post(
       req.body.email
     );
     req.session.loggedUser = user;
-    res.send(messages.AUTH.REGISTRATION.SUCCESS);
+    res.redirect((process.env.BASE_PATH || '') + "/");
   })
 );
 router.get("/logout", (req, res) => {

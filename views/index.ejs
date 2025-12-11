@@ -1,8 +1,10 @@
-<!-- required params (feed) -->
 <body>
-    <% if(loggedUser) { %>     
-        <h1 class="main-title">Welcome, <%= loggedUser.firstName %>!</h1>
+
+    <% if (loggedUser) { %>     
+
+        <h1 class="main-title">Welcome, <%= loggedUser.firstName ? loggedUser.firstName : loggedUser.username %>!</h1>
         <h2>What's happening?</h2>
+
         <section class="activity-feed">
             <% if (feed.length === 0) { %>
                 <p class="empty-message">No recent activities to show. Start logging runs or joining goals!</p>
@@ -18,5 +20,27 @@
                 <% }) %>
             <% } %>
         </section>
+
+    <% } else { %>
+
+        <!-- 🌟 WELCOME SPLASH SCREEN -->
+        <section class="welcome-splash">
+            <div class="splash-illustration">
+                <img src="/img/runnr_logo.png" alt="Running Illustration">
+            </div>
+            <h1 class="main-title">Welcome to Runnr</h1>
+            <p class="splash-tagline">
+                Track your runs. Join community goals. Stay motivated.
+            </p>
+
+            <div class="splash-buttons">
+                <a href="/auth" class="btn submit-btn">Get Started</a>
+                <a href="/about" class="btn btn-secondary">Learn More</a>
+            </div>
+
+            
+        </section>
+
     <% } %>
+
 </body>

@@ -1,36 +1,8 @@
-DATABASE
 
-Add profileImageUrl column to users table
-→ ALTER TABLE users ADD COLUMN profileImageUrl VARCHAR(255);
-
-
-ROUTES
-
-Create or extend your /settings route:
-
-/settings/username (POST)
-
-/settings/password (POST)
-
-/settings/email (POST)
-
-/settings/name (POST)
-
-/settings/profile-picture (POST, multipart/form-data)
-
-
-VIEWS
-
-Settings page with collapsible rows:
-
-Username
-
-Email
-
-Password
-
-First/Last name
-
-Profile picture upload
-
-Reuse .form-container and .setting-row UI pattern
+extend search results page to include filters
+suggest some random users or goals to follow
+remove visibility from goals
+make goals update (cron job and when users logs a run)
+DELETE RUNS?
+FIX PACE DISPLAY TO USE MINUTES INSTEAD OF SECONDS
+DISPLAY GOAL CARDS ON USER PROFILE

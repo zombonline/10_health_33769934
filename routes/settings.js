@@ -8,10 +8,12 @@ const values = require("../constants/values");
 const bcrypt = require("bcrypt");
 const profilePics = require("../utils/profilePics");
 
+// SETTINGS PAGE
 router.get("/", redirectLogin, (req, res) => {
   res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [] });
 });
 
+// UPDATE USERNAME
 router.post("/username", redirectLogin, check("newUsername").isLength({ min: values.MIN_USERNAME_LENGTH }).withMessage(messages.AUTH.REGISTRATION.USERNAME_TOO_SHORT(values.MIN_USERNAME_LENGTH)), async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -30,8 +32,7 @@ router.post("/username", redirectLogin, check("newUsername").isLength({ min: val
     req.session.loggedUser.username = newUsername;
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.USERNAME_UPDATED_SUCCESSFULLY] });
 });
-
-
+// UPDATE PASSWORD
 router.post("/password", redirectLogin, check("newPassword").isLength({ min: values.MIN_PASSWORD_LENGTH }).withMessage(messages.AUTH.REGISTRATION.PASSWORD_TOO_SHORT(values.MIN_PASSWORD_LENGTH)), async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -50,8 +51,7 @@ router.post("/password", redirectLogin, check("newPassword").isLength({ min: val
     await dbUtils.updateUserSetting("hashed_password", hashedPassword, userID);
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.PASSWORD_UPDATED_SUCCESSFULLY] });
 });
-
-
+// UPDATE EMAIL
 router.post("/email", redirectLogin, check("newEmail").isEmail().withMessage(messages.AUTH.REGISTRATION.INVALID_EMAIL), async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -62,8 +62,7 @@ router.post("/email", redirectLogin, check("newEmail").isEmail().withMessage(mes
     await dbUtils.updateUserSetting("email", newEmail, userID);
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.EMAIL_UPDATED_SUCCESSFULLY] });
 });
-
-
+// UPDATE FULL NAME
 router.post("/fullname", redirectLogin, async (req, res) => {
     const newFirstName = req.body.newFirstName || null;
     const newLastName = req.body.newLastName || null;   
@@ -74,7 +73,7 @@ router.post("/fullname", redirectLogin, async (req, res) => {
     req.session.loggedUser.lastName = newLastName;
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY] });
 });
-
+// UPDATE PROFILE PICTURE
 router.post(
   "/profile-picture",
   redirectLogin,
@@ -98,7 +97,7 @@ router.post(
         profilePics.deleteProfileImageByUrl(oldUrl);
       }
 
-      res.redirect("/auth/settings");
+      res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.PROFILE_PICTURE_UPDATED_SUCCESSFULLY] });
     } catch (err) {
       console.error(err);
       next(err);

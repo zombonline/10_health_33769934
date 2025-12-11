@@ -8,6 +8,6 @@ window.addEventListener("load", () => {
     const pos = sessionStorage.getItem("scrollPos");
     if (pos !== null) {
         window.scrollTo(0, parseInt(pos));
-        sessionStorage.removeItem("scrollPos"); // only restore ONCE
+        sessionStorage.removeItem("scrollPos"); 
     }
 });

@@ -89,7 +89,7 @@
          onclick="toggleSetting('fullname-form'); toggleSetting('fullname-row');">
         <span class="setting-label">Full Name</span>
         <span class="setting-value">
-            <%= loggedUser.firstName %> <%= loggedUser.lastName %>
+            <%= loggedUser.firstName ? loggedUser.firstName : 'John' %> <%= loggedUser.lastName ? loggedUser.lastName : 'Doe' %>
         </span>
     </div>
     <form id="fullname-form" 

@@ -32,5 +32,6 @@ module.exports = {
   },
   SEARCH: {
     NO_USERS_FOUND: "No users found matching your search criteria",
+    NO_GOALS_FOUND: "No goals found matching your search criteria",
   }
 };

@@ -2,6 +2,7 @@ const express = require("express");
 const dbUtils = require("../utils/dbUtils");
 const router = express.Router();
 
+//VIEW PROFILE
 router.get("/:userID", async (req, res) => {
   try {
     const view = req.query.view || "runs"; // "runs" | "followers" | "following"

@@ -91,7 +91,7 @@ async function getUserLoginCredentialsByUsername(username) {
 }
 
 
-//search users 
+//search
 
 async function searchUsers(queryStr) {
   const rows = await query(
@@ -103,6 +103,18 @@ async function searchUsers(queryStr) {
     users.push(await getLiteUserProfileByID(r.user_id));
   }
   return users;
+}
+
+async function searchGoals(queryStr) {
+  const rows = await query(
+    "SELECT * FROM goals WHERE title LIKE ? OR description LIKE ?",
+    [`%${queryStr}%`, `%${queryStr}%`]
+  );
+  const goals = [];
+  for (const r of rows) {
+    goals.push(mapGoal(r));
+  }
+  return goals;
 }
 
 
@@ -421,6 +433,7 @@ module.exports = {
 
   // search
   searchUsers,
+  searchGoals,
 
   // goals
   createGoal,

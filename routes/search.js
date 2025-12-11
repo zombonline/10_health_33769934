@@ -1,15 +1,14 @@
 const express = require("express");
-const redirectLogin = require("../middleware/redirectLogin");
 const dbUtils = require("../utils/dbUtils");
 const router = express.Router();
 const messages = require("../constants/messages");
-// Search route
+const sortUtils = require("../utils/sortUtils");
+// Search route (optional param q for query, and type for type of search: users, goals)
 router.get("/", async (req, res) => {
-    const query = req.query.q || "";
-    const results = await dbUtils.searchUsers(query);
-    const searchQuery = req.sanitize(query);
-    res.render("searchResults.ejs", { users: results, searchQuery: searchQuery, usersEmptyMessage: messages.SEARCH.NO_USERS_FOUND });
+    const searchQuery = req.sanitize(req.query.q || "");
+    const type = req.query.type || "users"; // users, goals
+    const searchResults = await sortUtils.getSearchResults(searchQuery, type);    
+    res.render("searchResults.ejs", { searchResults, usersEmptyMessage: type === "users" ? messages.NO_USERS_FOUND : messages.NO_GOALS_FOUND });
 });
-
 
 module.exports = router;

@@ -41,6 +41,23 @@ async function getUserFeed(userId) {
     return activities;
 }
 
+async function getSearchResults(query, type) {
+    let results = [];
+    switch(type) {
+        case "users":
+            results = await dbUtils.searchUsers(query);
+            break;
+        case "goals":
+            results =  await dbUtils.searchGoals(query);
+            break;
+        default:
+            results = await dbUtils.searchUsers(query);
+            break;
+    }
+    return { type, results, query };
+}
+
 module.exports = {
     getUserFeed,
+    getSearchResults
 };
