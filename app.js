@@ -14,13 +14,12 @@ const expressLayouts = require('express-ejs-layouts');
 // Load environment variables from .env file
 dotenv.config();
 
-console.log(
-  'dotnv',
-  process.env.DB_HOST,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  process.env.DB_NAME,
-);
+console.log(".ENV Variables:", {
+  HEALTH_HOST: process.env.HEALTH_HOST,
+  HEALTH_USER: process.env.HEALTH_USER,
+  HEALTH_DATABASE: process.env.HEALTH_DATABASE,
+  SESSION_SECRET: process.env.SESSION_SECRET ? 'DEFINED' : 'UNDEFINED',
+});
 
 // Define the database connection pool
 const db = mysql.createPool({
