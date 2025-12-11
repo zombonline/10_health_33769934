@@ -25,6 +25,7 @@ module.exports = {
       PASSWORD_UPDATED_SUCCESSFULLY: "Password updated successfully",
       NAME_UPDATED_SUCCESSFULLY: "Name updated successfully",
       USERNAME_UPDATED_SUCCESSFULLY: "Username updated successfully",
+      PROFILE_PICTURE_UPDATED_SUCCESSFULLY: "Profile picture updated successfully",
     },
     UNKNOWN: "An unknown error occurred",
     PERMISSION_DENIED: "You do not have permission to perform this action",

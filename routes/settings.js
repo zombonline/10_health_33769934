@@ -76,7 +76,7 @@ router.post("/fullname", redirectLogin, async (req, res) => {
     res.render("settings.ejs", { errorsToDisplay: [], successMessagesToDisplay: [messages.AUTH.UPDATE.NAME_UPDATED_SUCCESSFULLY] });
 });
 
-const { saveProfileImage, deleteOldProfileImage, getProfileImageUrl } = require("../utils/fileUtils");
+const { saveProfileImage, deleteOldProfileImage } = require("../utils/fileUtils");
 
 router.post("/profile-picture",
     redirectLogin,
@@ -98,7 +98,7 @@ router.post("/profile-picture",
         // Clean old one
         deleteOldProfileImage(oldUrl);
 
-        res.redirect("/auth/settings");
+        res.redirect((process.env.BASE_PATH || '') + "/auth/settings");
     }
 );
 

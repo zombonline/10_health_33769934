@@ -12,7 +12,7 @@ const redirectLogin = require("../middleware/redirectLogin");
 router.get("/", (req, res) => {
   const mode = req.query.mode || "login"; // 'login' or 'register'
   if(req.session.loggedUser){
-    return res.redirect("/");
+    return res.redirect((process.env.BASE_PATH || '') + '/' );
   }
   res.render("auth.ejs", { mode, errorsToDisplay: "" });
 });
