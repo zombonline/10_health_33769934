@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_name     VARCHAR(50),
     last_name      VARCHAR(50),
     email     VARCHAR(100) NOT NULL UNIQUE,
+    profile_image_url varchar(100) UNIQUE,
     PRIMARY KEY (user_id)
 );
 
