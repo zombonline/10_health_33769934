@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
   }
   const user = await dbUtils.getUserByUsername(req.body.username);
   req.session.loggedUser = user;
-  res.redirect("/");
+ res.redirect((process.env.BASE_PATH || '') + "/");
 });
 router.post(
   "/register",
@@ -85,7 +85,7 @@ router.get("/logout", (req, res) => {
     if (err) {
       return res.send(messages.AUTH.LOGOUT.FAILED);
     }
-    res.redirect("/");
+    res.redirect((process.env.BASE_PATH || '') + "/");
   });
 });
 router.get("/settings", redirectLogin, (req, res) => {
